@@ -37,8 +37,7 @@ public class Post extends AbstractAuditableEntity {
         DRAFT, PUBLISHED
     }
 
-    @Embedded()
-    private Slug slug;
+    private String slug;
 
     @Column(name = "title")
     @NotBlank

@@ -22,7 +22,7 @@ public class PostSummary {
 
     private Long id;
 
-    private Slug slug;
+    private String slug;
 
     private String title;
 

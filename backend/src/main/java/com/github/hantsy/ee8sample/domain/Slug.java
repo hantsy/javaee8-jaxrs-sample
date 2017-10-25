@@ -23,6 +23,6 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class Slug implements Serializable {
     
-    private String slug;
+    private String value;
     
 }

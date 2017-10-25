@@ -9,7 +9,7 @@ import javax.enterprise.inject.Produces;
  * @author hantsy
  */
 @Dependent
-public class AuthenticatedUserProducer {
+public class AuthenticatedUserInfoProducer {
 
     @Produces
     @Authenticated

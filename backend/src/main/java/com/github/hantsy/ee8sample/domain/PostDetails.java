@@ -25,7 +25,7 @@ public class PostDetails implements Serializable {
 
     private Long id;
 
-    private Slug slug;
+    private String slug;
 
     private String title;
 

@@ -6,10 +6,10 @@
 package com.github.hantsy.ee8sample.domain;
 
 import com.github.hantsy.ee8sample.support.AbstractAuditableEntity;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-
 
 /**
  *
@@ -42,8 +41,8 @@ public class Comment extends AbstractAuditableEntity {
     @NonNull
     private String content;
 
-    @ManyToOne()
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "post_slug"))
+    private Slug post;
 
 }

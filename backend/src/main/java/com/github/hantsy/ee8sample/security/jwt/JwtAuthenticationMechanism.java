@@ -8,10 +8,13 @@ package com.github.hantsy.ee8sample.security.jwt;
 import static com.github.hantsy.ee8sample.Constants.AUTHORIZATION_HEADER;
 import static com.github.hantsy.ee8sample.Constants.BEARER;
 import static com.github.hantsy.ee8sample.Constants.REMEMBERME_VALIDITY_SECONDS;
+import com.github.hantsy.ee8sample.security.Authenticated;
+import com.github.hantsy.ee8sample.security.UserInfo;
 import io.jsonwebtoken.ExpiredJwtException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.security.enterprise.AuthenticationStatus;
 import javax.security.enterprise.authentication.mechanism.http.HttpAuthenticationMechanism;
@@ -48,6 +51,10 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
 
     @Inject
     private TokenProvider tokenProvider;
+
+    @Inject
+    @Authenticated
+    private Event<UserInfo> authenticatedUserInfo;
 
     @Override
     public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext context) {
@@ -95,6 +102,10 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
         try {
             if (tokenProvider.validateToken(token)) {
                 JwtCredential credential = tokenProvider.getCredential(token);
+
+                //fire an @Authenticated CDI event.
+                authenticatedUserInfo.fire(new UserInfo(credential.getPrincipal(), credential.getAuthorities()));
+
                 return context.notifyContainerAboutLogin(credential.getPrincipal(), credential.getAuthorities());
             }
             // if token invalid, response with unauthorized status
@@ -118,6 +129,10 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
             String jwt = tokenProvider.createToken(result.getCallerPrincipal().getName(), result.getCallerGroups(), false);
             context.getResponse().setHeader(AUTHORIZATION_HEADER, BEARER + jwt);
         }
+        
+        //fire an @Authenticated CDI event.
+        authenticatedUserInfo.fire(new UserInfo(result.getCallerPrincipal().getName(), result.getCallerGroups()));    
+        
         return context.notifyContainerAboutLogin(result.getCallerPrincipal(), result.getCallerGroups());
     }
 
