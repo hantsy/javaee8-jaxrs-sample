@@ -14,8 +14,8 @@ import javax.security.enterprise.credential.Credential;
  */
 public class JwtCredential implements Credential {
 
-    private String principal;
-    private Set<String> authorities;
+    private final String principal;
+    private final Set<String> authorities;
 
     public JwtCredential(String principal, Set<String> authorities) {
         this.principal = principal;

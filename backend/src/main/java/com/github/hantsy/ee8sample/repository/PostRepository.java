@@ -73,6 +73,11 @@ public class PostRepository extends AbstractRepository<Post, Long> {
                 .collect(toList());
     }
 
+    public Optional<Post> findBySlug(String slug) {
+        Objects.requireNonNull(slug, "Slug can not be null");
+        return this.stream().filter(p -> p.getSlug().equals(slug)).findFirst();
+    }
+
     @Override
     protected EntityManager entityManager() {
         return this.em;

@@ -33,7 +33,7 @@ public class Post extends AbstractAuditableEntity {
      */
     private static final long serialVersionUID = 1L;
 
-    static enum Status {
+    public static enum Status {
         DRAFT, PUBLISHED
     }
 

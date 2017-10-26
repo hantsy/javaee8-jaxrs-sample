@@ -7,6 +7,9 @@ package com.github.hantsy.ee8sample.domain;
 
 import com.github.hantsy.ee8sample.support.AbstractEntity;
 import java.time.LocalDateTime;
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -27,8 +30,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Favorite extends AbstractEntity {
-
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "post_slug"))
     private Slug slug;
+    
     private LocalDateTime createdDate;
-    private String createdBy;
+      
+    private String username;
 }

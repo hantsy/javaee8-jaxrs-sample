@@ -42,6 +42,13 @@ public class CommentRepository extends AbstractRepository<Comment, Long> {
                 .collect(toList());
     }
 
+    public long countByPost(String slug) {
+        Objects.requireNonNull(slug, "post slug can not be null");
+        return this.stream()
+                .filter(c -> c.getPost().equals(slug))
+                .count();
+    }
+
     @Override
     protected EntityManager entityManager() {
         return this.em;
