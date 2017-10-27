@@ -1,7 +1,7 @@
 package com.github.hantsy.ee8sample.repository;
 
 import com.github.hantsy.ee8sample.domain.Post;
-import com.github.hantsy.ee8sample.support.AbstractRepository;
+import com.github.hantsy.ee8sample.domain.support.AbstractRepository;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,8 +16,7 @@ public class PostRepository extends AbstractRepository<Post, Long> {
 
     @PersistenceContext
     private EntityManager em;
-
-    public List<Post> findByKeyword(String keyword) {
+//        public List<Post> findByKeyword(String keyword) {
 //        CriteriaBuilder cb = this.em.getCriteriaBuilder();
 //
 //        CriteriaQuery<Post> q = cb.createQuery(Post.class);
@@ -39,14 +38,26 @@ public class PostRepository extends AbstractRepository<Post, Long> {
 //        TypedQuery<Post> query = em.createQuery(q);
 //
 //        return query.getResultList();
+
+    public List<Post> findByKeyword(String keyword) {
         return this.stream()
                 .filter(
                         p -> Optional.ofNullable(keyword)
                                 .map(k -> p.getTitle().contains(k) || p.getContent().contains(k))
-                                .orElse(Boolean.TRUE)
+                                .orElse(true)
                 )
                 .sorted(Post.DEFAULT_COMPARATOR)
                 .collect(toList());
+    }
+
+    public long countByKeyword(String keyword) {
+        return this.stream()
+                .filter(
+                        p -> Optional.ofNullable(keyword)
+                                .map(k -> p.getTitle().contains(k) || p.getContent().contains(k))
+                                .orElse(true)
+                )
+                .count();
     }
 
     public List<Post> findByCreatedBy(String username) {

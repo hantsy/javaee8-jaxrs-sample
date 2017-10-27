@@ -24,7 +24,7 @@
         <version.eclipselink>2.7.0</version.eclipselink>
         <version.mockito>2.10.0</version.mockito>
         <version.glassfish>5.0</version.glassfish>
-        <version.payara>5.0.0.Alpha1</version.payara>
+        <version.payara>5.0.0.Alpha2</version.payara>
         <version.arquillian-glassfish>1.0.1</version.arquillian-glassfish>
         <version.arquillian-payara>1.0.Beta2</version.arquillian-payara>
         <version.jersey>2.26</version.jersey>
@@ -80,7 +80,7 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>	
-            <dependency>
+<!--            <dependency>
                 <groupId>org.jboss.arquillian.extension</groupId>
                 <artifactId>arquillian-drone-bom</artifactId>
                 <version>2.4.2</version>
@@ -93,7 +93,7 @@
                 <version>3.5.3</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
+            </dependency>-->
         </dependencies>
     </dependencyManagement>
     
@@ -152,13 +152,13 @@
             <type>pom</type>
         </dependency>
         
-        <dependency>
+<!--        <dependency>
             <groupId>org.jboss.arquillian.graphene</groupId>
             <artifactId>graphene-webdriver</artifactId>
             <version>2.3.1</version>
             <type>pom</type>
             <scope>test</scope>
-        </dependency>
+        </dependency>-->
 
         <!-- Needed for running tests (you may also use TestNG) -->
         <dependency>

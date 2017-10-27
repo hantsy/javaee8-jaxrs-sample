@@ -5,7 +5,7 @@
  */
 package com.github.hantsy.ee8sample.domain;
 
-import com.github.hantsy.ee8sample.support.AbstractEntity;
+import com.github.hantsy.ee8sample.domain.support.AbstractEntity;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.ElementCollection;

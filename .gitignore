@@ -27,3 +27,4 @@ nb-*.xml
 .classpath
 .project
 .settings
+/backend/nbproject/

@@ -3,7 +3,7 @@ package com.github.hantsy.ee8sample.repository;
 import com.github.hantsy.ee8sample.domain.Favorite;
 import com.github.hantsy.ee8sample.domain.Slug;
 import com.github.hantsy.ee8sample.domain.User;
-import com.github.hantsy.ee8sample.support.AbstractRepository;
+import com.github.hantsy.ee8sample.domain.support.AbstractRepository;
 import java.util.Optional;
 
 import javax.ejb.Stateless;

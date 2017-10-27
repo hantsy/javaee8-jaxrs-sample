@@ -54,7 +54,7 @@ public class PostDetails implements Serializable {
     @JsonbProperty("_links")
     private List<Link> links = new ArrayList<>();
 
-    public PostDetails(Post data, UriInfo uriInfo) {
+    public PostDetails(Post data) {
         setTitle(data.getTitle());
         setContent(data.getContent());
         setSlug(data.getSlug());
@@ -64,10 +64,10 @@ public class PostDetails implements Serializable {
         setLastModifiedDate(data.getLastModifiedDate());
         setLastModifiedBy(data.getLastModifiedBy());
         
-        Link self = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()).rel("self").uri("posts/{slug}").build(data.getSlug());
-        Link comments = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()).rel("comments").uri("posts/{slug}/comments").build(data.getSlug());
-        this.links.add(self);
-        this.links.add(comments);
+//        Link self = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()).rel("self").uri("posts/{slug}").build(data.getSlug());
+//        Link comments = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()).rel("comments").uri("posts/{slug}/comments").build(data.getSlug());
+//        this.links.add(self);
+//        this.links.add(comments);
     }
     
     public PostDetails addLink(Link link){

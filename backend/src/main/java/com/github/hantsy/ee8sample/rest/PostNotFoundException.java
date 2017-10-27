@@ -9,9 +9,9 @@ package com.github.hantsy.ee8sample.rest;
  *
  * @author hantsy
  */
-public class PostNotFoundExeception extends RuntimeException {
+public class PostNotFoundException extends RuntimeException {
 
-    public PostNotFoundExeception(String slug) {
+    public PostNotFoundException(String slug) {
         super(String.format("post:{0} is not found", slug));
     }
 

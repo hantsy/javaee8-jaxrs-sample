@@ -5,7 +5,7 @@
  */
 package com.github.hantsy.ee8sample.domain;
 
-import com.github.hantsy.ee8sample.support.AbstractAuditableEntity;
+import com.github.hantsy.ee8sample.domain.support.AbstractAuditableEntity;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embedded;

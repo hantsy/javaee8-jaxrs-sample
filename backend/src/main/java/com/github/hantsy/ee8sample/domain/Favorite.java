@@ -5,7 +5,7 @@
  */
 package com.github.hantsy.ee8sample.domain;
 
-import com.github.hantsy.ee8sample.support.AbstractEntity;
+import com.github.hantsy.ee8sample.domain.support.AbstractEntity;
 import java.time.LocalDateTime;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;

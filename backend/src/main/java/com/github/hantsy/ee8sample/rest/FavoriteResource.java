@@ -5,7 +5,7 @@
  */
 package com.github.hantsy.ee8sample.rest;
 
-import com.github.hantsy.ee8sample.domain.Comment;
+import com.github.hantsy.ee8sample.domain.Favorite;
 import com.github.hantsy.ee8sample.domain.Slug;
 import static java.util.Collections.emptyList;
 import java.util.List;
@@ -16,23 +16,24 @@ import javax.ws.rs.Path;
  *
  * @author hantsy
  */
-//@Path("comments")
+//@Path("favorites")
 //@Stateless
-public class CommentResource {
+public class FavoriteResource {
 
     private Slug slug;
 
-    public CommentResource() {
+    public FavoriteResource() {
     }
 
-    public CommentResource(String slug) {
+    public FavoriteResource(String slug) {
         this.slug = new Slug(slug);
     }
-
+    
+    
     @Path("")
     @GET
-    public List<Comment> allCommentsOfPost() {
-        return emptyList();
+    public List<Favorite> allFavoritesOfPost(){
+       return emptyList();
     }
 
 }
