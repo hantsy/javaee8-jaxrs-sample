@@ -65,27 +65,27 @@ public class PostRepositoryIT {
 
     @Test
     public void testStreamResultWithNullKeyword() {
-        List<Post> _posts = posts.findByKeyword(null);
+        List<Post> _posts = posts.findByKeyword(null, 10, 0);
         assertTrue(!_posts.isEmpty());
         assertTrue(_posts.size() == posts.countByKeyword("test"));
     }
 
     @Test
     public void testStreamResult() {
-        List<Post> _posts = posts.findByKeyword("test");
+        List<Post> _posts = posts.findByKeyword("test", 10, 0);
         assertTrue(!_posts.isEmpty());
         assertTrue(_posts.size() == posts.countByKeyword("test"));
     }
 
     @Test
     public void testFindByKeyword() {
-        List<Post> foundPosts = posts.findByKeyword("test");
+        List<Post> foundPosts = posts.findByKeyword("test", 10, 0);
         assertEquals(1, foundPosts.size());
     }
 
     @Test
     public void testFindByKeywordNotFound() {
-        List<Post> foundPosts = posts.findByKeyword("test123");
+        List<Post> foundPosts = posts.findByKeyword("test123", 10, 0);
         assertEquals(0, foundPosts.size());
     }
 

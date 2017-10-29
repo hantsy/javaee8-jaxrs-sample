@@ -5,10 +5,25 @@
  */
 package com.github.hantsy.ee8sample.rest;
 
+import java.io.Serializable;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  *
  * @author hantsy
  */
-public class CommentForm {
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class CommentForm implements Serializable{
     
+    @NotNull
+    @NotBlank
+    private String content;
 }

@@ -5,10 +5,22 @@
  */
 package com.github.hantsy.ee8sample.rest;
 
+import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  *
  * @author hantsy
  */
-public class CommentDetails {
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class CommentDetails implements Serializable{
     
+    private String slug;
+    private String content;
 }

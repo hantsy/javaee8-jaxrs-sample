@@ -52,9 +52,10 @@ public abstract class AbstractRepository<T extends AbstractEntity, ID> {
         return entityManager().find(entityClass(), id);
     }
 
-    public void delete(T entity) {
+    public boolean delete(T entity) {
         T _entity = entityManager().merge(entity);
         entityManager().remove(_entity);
+        return true;
     }
 
     public void deleteById(ID id) {

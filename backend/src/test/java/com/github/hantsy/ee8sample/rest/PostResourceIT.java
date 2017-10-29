@@ -5,8 +5,12 @@
  */
 package com.github.hantsy.ee8sample.rest;
 
+import com.github.hantsy.ee8sample.aggregate.PostDetails;
+import com.github.hantsy.ee8sample.aggregate.PostSummary;
+import com.github.hantsy.ee8sample.aggregate.PostSummaryList;
 import com.github.hantsy.ee8sample.Constants;
 import com.github.hantsy.ee8sample.JaxrsActiviator;
+import com.github.hantsy.ee8sample.Resources;
 import com.github.hantsy.ee8sample.domain.Comment;
 import com.github.hantsy.ee8sample.domain.Comment_;
 import com.github.hantsy.ee8sample.domain.Favorite;
@@ -15,6 +19,8 @@ import com.github.hantsy.ee8sample.domain.Post;
 import com.github.hantsy.ee8sample.domain.Post_;
 import com.github.hantsy.ee8sample.domain.Slug;
 import com.github.hantsy.ee8sample.domain.Slug_;
+import com.github.hantsy.ee8sample.domain.Username;
+import com.github.hantsy.ee8sample.domain.Username_;
 import com.github.hantsy.ee8sample.repository.CommentRepository;
 import com.github.hantsy.ee8sample.repository.FavoriteRepository;
 import com.github.hantsy.ee8sample.repository.PostRepository;
@@ -23,12 +29,13 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.Resources;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -76,6 +83,8 @@ public class PostResourceIT {
                 .addClasses(
                         Slug.class,
                         Slug_.class,
+                        Username.class, 
+                        Username_.class,
                         Favorite.class, 
                         Favorite_.class,
                         Post.class,
@@ -89,9 +98,9 @@ public class PostResourceIT {
                 //add service classes
                 .addClasses(
                         PostForm.class,
-                        PostDetails.class,
-                        PostSummary.class,
-                        PostSummaryList.class,
+//                        PostDetails.class,
+//                        PostSummary.class,
+//                        PostSummaryList.class,
                         CommentForm.class,
                         CommentDetails.class
                 )
@@ -108,7 +117,9 @@ public class PostResourceIT {
                         FavoriteResource.class,
                         CommentResource.class,
                         PostNotFoundExceptionMapper.class,
-                        PostNotFoundException.class
+                        PostNotFoundException.class,
+                        CommentNotFoundExceptionMapper.class,
+                        CommentNotFoundException.class
                 )
                 // .addAsResource("test-log4j.properties", "log4j.properties")
                 //Add JPA persistence configration.
@@ -120,7 +131,7 @@ public class PostResourceIT {
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
         //  .addAsWebInfResource("test-jboss-deployment-structure.xml", "jboss-deployment-structure.xml");
 
-        LOG.log(Level.INFO, "war to string @{0}", war.toString());
+        LOG.log(Level.INFO, "war to string @{0}", war.toString(true));
         return war;
     }
 
@@ -133,6 +144,7 @@ public class PostResourceIT {
     public void setup() throws MalformedURLException {
         client = ClientBuilder.newClient();
         client.register(PostNotFoundExceptionMapper.class);
+        client.register(CommentNotFoundExceptionMapper.class);
 //        final WebTarget targetAuthGetAll = client.target(URI.create(new URL(base, "api/auth/login").toExternalForm()));
 //        final Response resAuthGetAll = targetAuthGetAll.request()
 //                .accept(MediaType.APPLICATION_JSON_TYPE)
@@ -161,9 +173,9 @@ public class PostResourceIT {
         final WebTarget targetGetAll = client.target(URI.create(new URL(base, "api/posts").toExternalForm()));
         try (Response resGetAll = targetGetAll.request().accept(MediaType.APPLICATION_JSON_TYPE).get()) {
             assertEquals(200, resGetAll.getStatus());
-            PostSummaryList results = resGetAll.readEntity(PostSummaryList.class);
+            List<Post> results = resGetAll.readEntity(new GenericType<List<Post>>(){});
             assertTrue(results != null);
-            assertTrue(results.getContent().size() == 2);
+            assertTrue(results.size() == 3);
         }
 
     }

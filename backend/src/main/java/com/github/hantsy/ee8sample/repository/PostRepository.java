@@ -13,7 +13,7 @@ import javax.persistence.PersistenceContext;
 
 @Stateless
 public class PostRepository extends AbstractRepository<Post, Long> {
-
+    
     @PersistenceContext
     private EntityManager em;
 //        public List<Post> findByKeyword(String keyword) {
@@ -39,17 +39,19 @@ public class PostRepository extends AbstractRepository<Post, Long> {
 //
 //        return query.getResultList();
 
-    public List<Post> findByKeyword(String keyword) {
+    public List<Post> findByKeyword(String keyword, long limit, long offset) {
         return this.stream()
                 .filter(
                         p -> Optional.ofNullable(keyword)
                                 .map(k -> p.getTitle().contains(k) || p.getContent().contains(k))
                                 .orElse(true)
                 )
-                .sorted(Post.DEFAULT_COMPARATOR)
+               // .sorted(Post.DEFAULT_COMPARATOR)
+                .limit(limit)
+                .skip(offset)
                 .collect(toList());
     }
-
+    
     public long countByKeyword(String keyword) {
         return this.stream()
                 .filter(
@@ -59,7 +61,7 @@ public class PostRepository extends AbstractRepository<Post, Long> {
                 )
                 .count();
     }
-
+    
     public List<Post> findByCreatedBy(String username) {
         Objects.requireNonNull(username, "username can not be null");
 //        CriteriaBuilder cb = this.em.getCriteriaBuilder();
@@ -83,15 +85,15 @@ public class PostRepository extends AbstractRepository<Post, Long> {
                 .sorted(Post.DEFAULT_COMPARATOR)
                 .collect(toList());
     }
-
+    
     public Optional<Post> findBySlug(String slug) {
         Objects.requireNonNull(slug, "Slug can not be null");
         return this.stream().filter(p -> p.getSlug().equals(slug)).findFirst();
     }
-
+    
     @Override
     protected EntityManager entityManager() {
         return this.em;
     }
-
+    
 }

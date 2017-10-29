@@ -20,16 +20,15 @@ import javax.ws.rs.Path;
 //@Stateless
 public class FavoriteResource {
 
-    private Slug slug;
+    private String slug;
 
     public FavoriteResource() {
     }
 
     public FavoriteResource(String slug) {
-        this.slug = new Slug(slug);
+        this.slug = slug;
     }
-    
-    
+       
     @Path("")
     @GET
     public List<Favorite> allFavoritesOfPost(){

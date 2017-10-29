@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.hantsy.ee8sample.domain;
+package com.github.hantsy.ee8sample.aggregate;
 
 import java.io.Serializable;
-import javax.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,9 +19,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Embeddable
-public class Slug implements Serializable {
+public class PageMetadata implements Serializable {
     
-    private String slug;
+    private long limit;
+    private long offset;
+    private long total;
     
 }

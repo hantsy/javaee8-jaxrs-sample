@@ -21,8 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Embeddable
-public class Slug implements Serializable {
+public class Username implements Serializable {
     
-    private String slug;
-    
+    private String username;
 }

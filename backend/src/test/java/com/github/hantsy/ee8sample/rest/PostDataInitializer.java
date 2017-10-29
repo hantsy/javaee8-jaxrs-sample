@@ -10,7 +10,6 @@ import com.github.hantsy.ee8sample.domain.Post;
 import com.github.hantsy.ee8sample.domain.Slug;
 import com.github.hantsy.ee8sample.repository.CommentRepository;
 import com.github.hantsy.ee8sample.repository.PostRepository;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;

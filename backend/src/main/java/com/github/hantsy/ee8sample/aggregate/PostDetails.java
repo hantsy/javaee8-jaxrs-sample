@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.hantsy.ee8sample.rest;
+package com.github.hantsy.ee8sample.aggregate;
 
 import com.github.hantsy.ee8sample.domain.Post;
 import com.github.hantsy.ee8sample.domain.Post.Status;

@@ -30,11 +30,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Favorite extends AbstractEntity {
+
     @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "post_slug"))
-    private Slug slug;
-    
+    @AttributeOverride(name = "slug", column = @Column(name = "post_slug"))
+    private Slug post;
+
     private LocalDateTime createdDate;
-      
-    private String username;
+
+    @Embedded
+    //@AttributeOverride(name = "username", column = @Column(name = "user"))
+    private Username user;
 }

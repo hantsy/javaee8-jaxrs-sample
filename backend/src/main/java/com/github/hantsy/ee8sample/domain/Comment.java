@@ -42,7 +42,7 @@ public class Comment extends AbstractAuditableEntity {
     private String content;
 
     @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "post_slug"))
+    @AttributeOverride(name = "slug", column = @Column(name = "post_slug"))
     private Slug post;
 
 }

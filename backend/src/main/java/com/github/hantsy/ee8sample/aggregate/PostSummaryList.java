@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.hantsy.ee8sample.rest;
+package com.github.hantsy.ee8sample.aggregate;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.json.bind.annotation.JsonbProperty;
@@ -22,12 +23,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostSummaryList {
+public class PostSummaryList implements Serializable {
 
     private List<PostSummary> content = new ArrayList<>();
 
     @JsonbProperty("_links")
     private List<Link> links = new ArrayList<>();
+
+    @JsonbProperty("_metadata")
+    private PageMetadata metadata;
 
     public PostSummaryList(List<PostSummary> content) {
         this.content = content;
@@ -37,4 +41,10 @@ public class PostSummaryList {
         this.links.add(link);
         return this;
     }
+
+    public PostSummaryList metadata(PageMetadata meta) {
+        this.setMetadata(meta);
+        return this;
+    }
+
 }
