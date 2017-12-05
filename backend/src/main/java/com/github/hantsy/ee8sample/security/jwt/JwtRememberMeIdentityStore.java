@@ -24,7 +24,8 @@ import javax.security.enterprise.identitystore.RememberMeIdentityStore;
 @ApplicationScoped
 public class JwtRememberMeIdentityStore implements RememberMeIdentityStore {
 
-    private static final Logger LOGGER = Logger.getLogger(JwtRememberMeIdentityStore.class.getName());
+    @Inject
+    private Logger LOGGER ;
 
     @Inject
     private TokenProvider tokenProvider;

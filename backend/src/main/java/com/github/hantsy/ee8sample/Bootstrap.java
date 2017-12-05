@@ -11,6 +11,7 @@ import com.github.hantsy.ee8sample.domain.Comment;
 import com.github.hantsy.ee8sample.domain.Post;
 import com.github.hantsy.ee8sample.domain.Slug;
 import com.github.hantsy.ee8sample.domain.User;
+import com.github.hantsy.ee8sample.domain.Username;
 import com.github.hantsy.ee8sample.repository.CommentRepository;
 import com.github.hantsy.ee8sample.repository.PostRepository;
 import com.github.hantsy.ee8sample.repository.UserRepository;
@@ -78,21 +79,21 @@ public class Bootstrap {
                 .title("Build RESTful APIs with JAXRS 2.1")
                 .content("Content of Getting started with REST")
                 .build();
-        post1.setCreatedBy("user");
+        post1.setCreatedBy(new Username("user"));
         posts.save(post1);
 
         Post post2 = Post.builder()
                 .title("Getting started with Java EE 8")
                 .content("Content of Getting started with Java EE 8")
                 .build();
-        post2.setCreatedBy("user");
+        post2.setCreatedBy(new Username("user"));
         posts.save(post2);
 
         Post post3 = Post.builder()
                 .title("Getting started with Angular2")
                 .content("Content of Getting started with Angular2")
                 .build();
-        post3.setCreatedBy("user");
+        post3.setCreatedBy(new Username("user"));
         post3 = posts.save(post3);
 
         Comment comment = Comment.builder()
@@ -100,7 +101,7 @@ public class Bootstrap {
                 .build();
 
         comment.setPost(new Slug(post3.getSlug()));
-        comment.setCreatedBy("user");
+        comment.setCreatedBy(new Username("user"));
         comments.save(comment);
 
     }

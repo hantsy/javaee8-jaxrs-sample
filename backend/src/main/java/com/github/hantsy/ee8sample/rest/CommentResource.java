@@ -8,16 +8,17 @@ package com.github.hantsy.ee8sample.rest;
 import com.github.hantsy.ee8sample.domain.Comment;
 import com.github.hantsy.ee8sample.domain.Slug;
 import com.github.hantsy.ee8sample.repository.CommentRepository;
-import static java.util.Collections.emptyList;
-import java.util.List;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -28,9 +29,10 @@ import javax.ws.rs.core.UriInfo;
  * @author hantsy
  */
 //@Path("comments")
-//@Stateless
+@Stateless
 public class CommentResource {
 
+    @PathParam("slug")
     private String slug;
 
     @Inject
@@ -42,14 +44,12 @@ public class CommentResource {
     public CommentResource() {
     }
 
-    public CommentResource(String slug) {
-        this.slug = slug;
-    }
-
-    @Path("")
     @GET
-    public List<Comment> allCommentsOfPost() {
-        return emptyList();
+    public Response allCommentsOfPost(
+            @QueryParam("limit") @DefaultValue("10") int limit,
+            @QueryParam("offset") @DefaultValue("0") int offset
+    ) {
+        return Response.ok(comments.findByPost(slug, limit, offset)).build();
     }
 
     @Path("count")
@@ -59,7 +59,6 @@ public class CommentResource {
         return Response.ok(comments.countByPost(slug)).build();
     }
 
-    @Path("")
     @POST
     public Response saveComment(CommentForm form) {
         Comment comment = Comment.builder().post(new Slug(slug)).content(form.getContent()).build();

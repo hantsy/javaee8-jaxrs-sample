@@ -38,6 +38,6 @@ public class Favorite extends AbstractEntity {
     private LocalDateTime createdDate;
 
     @Embedded
-    //@AttributeOverride(name = "username", column = @Column(name = "user"))
+    @AttributeOverride(name = "username", column = @Column(name = "user"))
     private Username user;
 }

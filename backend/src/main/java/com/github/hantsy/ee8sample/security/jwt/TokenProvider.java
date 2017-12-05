@@ -6,6 +6,7 @@
 package com.github.hantsy.ee8sample.security.jwt;
 
 import static com.github.hantsy.ee8sample.Constants.REMEMBERME_VALIDITY_SECONDS;
+import static com.github.hantsy.ee8sample.Constants.TOKEN_VALIDITY_SECONDS;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -44,8 +45,8 @@ public class TokenProvider {
     public void init() {
         // load from config
         this.secretKey = "my-secret-jwt-key";
-        this.tokenValidity = TimeUnit.HOURS.toMillis(10);   //10 hours
-        this.tokenValidityForRememberMe = TimeUnit.SECONDS.toMillis(REMEMBERME_VALIDITY_SECONDS);   //24 hours
+        this.tokenValidity = TimeUnit.SECONDS.toMillis(TOKEN_VALIDITY_SECONDS);   
+        this.tokenValidityForRememberMe = TimeUnit.SECONDS.toMillis(REMEMBERME_VALIDITY_SECONDS);  
     }
 
     public String createToken(String username, Set<String> authorities, Boolean rememberMe) {

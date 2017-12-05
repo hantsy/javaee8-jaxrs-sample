@@ -6,7 +6,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>Java EE 8 JAXRS Restful APIs sample</name>
+    <name>Blog RESTful API: Java EE 8 JAXRS Restful APIs sample</name>
 
     <properties>
         <java.version>1.8</java.version>

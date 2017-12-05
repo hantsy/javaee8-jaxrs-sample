@@ -5,6 +5,7 @@
  */
 package com.github.hantsy.ee8sample.domain.support;
 
+import com.github.hantsy.ee8sample.domain.Username;
 import com.github.hantsy.ee8sample.security.UserInfo;
 import com.github.hantsy.ee8sample.security.Authenticated;
 import java.time.LocalDateTime;
@@ -42,19 +43,23 @@ public class AuditEntityListener {
             AbstractAuditableEntity o = (AbstractAuditableEntity) entity;
             o.setLastModifiedDate(LocalDateTime.now());
 
-            if (o.getLastModifiedBy()== null) {
+            if (o.getLastModifiedBy() == null) {
                 o.setLastModifiedBy(currentUser());
             }
         }
     }
 
-    private String currentUser() {
-        UserInfo user = CDI.current().select(UserInfo.class, Authenticated.INSTANCE).get();
-        LOG.log(Level.INFO, "set username for enttity in AuditEntityListener@{0}", user);
-        if (user == null) {
+    private Username currentUser() {
+        try {
+            UserInfo user = CDI.current().select(UserInfo.class, Authenticated.INSTANCE).get();
+            LOG.log(Level.INFO, "set username for enttity in AuditEntityListener@{0}", user);
+            if (user == null) {
+                return null;
+            }
+            return new Username(user.getName());
+        } catch (Exception e) {
             return null;
         }
-        return user.getName();
+
     }
 }
-

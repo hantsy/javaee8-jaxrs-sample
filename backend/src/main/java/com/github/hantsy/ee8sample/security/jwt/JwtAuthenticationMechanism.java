@@ -5,8 +5,6 @@
  */
 package com.github.hantsy.ee8sample.security.jwt;
 
-import static com.github.hantsy.ee8sample.Constants.AUTHORIZATION_HEADER;
-import static com.github.hantsy.ee8sample.Constants.BEARER;
 import static com.github.hantsy.ee8sample.Constants.REMEMBERME_VALIDITY_SECONDS;
 import com.github.hantsy.ee8sample.security.Authenticated;
 import com.github.hantsy.ee8sample.security.UserInfo;
@@ -25,6 +23,8 @@ import javax.security.enterprise.identitystore.CredentialValidationResult;
 import javax.security.enterprise.identitystore.IdentityStoreHandler;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.HttpHeaders;
+import static com.github.hantsy.ee8sample.Constants.AUTHORIZATION_PREFIX;
 
 /**
  *
@@ -54,7 +54,7 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
 
     @Inject
     @Authenticated
-    private Event<UserInfo> authenticatedUserInfo;
+    private Event<UserInfo> authenticatedEvent;
 
     @Override
     public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext context) {
@@ -104,7 +104,7 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
                 JwtCredential credential = tokenProvider.getCredential(token);
 
                 //fire an @Authenticated CDI event.
-                authenticatedUserInfo.fire(new UserInfo(credential.getPrincipal(), credential.getAuthorities()));
+                authenticatedEvent.fire(new UserInfo(credential.getPrincipal(), credential.getAuthorities()));
 
                 return context.notifyContainerAboutLogin(credential.getPrincipal(), credential.getAuthorities());
             }
@@ -127,11 +127,11 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
     private AuthenticationStatus createToken(CredentialValidationResult result, HttpMessageContext context) {
         if (!isRememberMe(context)) {
             String jwt = tokenProvider.createToken(result.getCallerPrincipal().getName(), result.getCallerGroups(), false);
-            context.getResponse().setHeader(AUTHORIZATION_HEADER, BEARER + jwt);
+            context.getResponse().setHeader(HttpHeaders.AUTHORIZATION, AUTHORIZATION_PREFIX + jwt);
         }
         
         //fire an @Authenticated CDI event.
-        authenticatedUserInfo.fire(new UserInfo(result.getCallerPrincipal().getName(), result.getCallerGroups()));    
+        authenticatedEvent.fire(new UserInfo(result.getCallerPrincipal().getName(), result.getCallerGroups()));    
         
         return context.notifyContainerAboutLogin(result.getCallerPrincipal(), result.getCallerGroups());
     }
@@ -143,9 +143,9 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
      * @return The JWT access tokens
      */
     private String extractToken(HttpMessageContext context) {
-        String authorizationHeader = context.getRequest().getHeader(AUTHORIZATION_HEADER);
-        if (authorizationHeader != null && authorizationHeader.startsWith(BEARER)) {
-            String token = authorizationHeader.substring(BEARER.length(), authorizationHeader.length());
+        String authorizationHeader = context.getRequest().getHeader(HttpHeaders.AUTHORIZATION);
+        if (authorizationHeader != null && authorizationHeader.startsWith(AUTHORIZATION_PREFIX)) {
+            String token = authorizationHeader.substring(AUTHORIZATION_PREFIX.length(), authorizationHeader.length());
             return token;
         }
         return null;
@@ -159,7 +159,7 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
      * @return The remember me flag
      */
     public Boolean isRememberMe(HttpMessageContext context) {
-        return Boolean.valueOf(context.getRequest().getParameter("rememberme"));
+        return Boolean.valueOf(context.getRequest().getParameter("rememberMe"));
     }
 
 }

@@ -3,12 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.hantsy.ee8sample.security.jwt;
+package com.github.hantsy.ee8sample.security.identitystore;
 
-import com.github.hantsy.ee8sample.domain.User;
 import com.github.hantsy.ee8sample.repository.UserRepository;
-import static java.util.Collections.emptySet;
-import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;

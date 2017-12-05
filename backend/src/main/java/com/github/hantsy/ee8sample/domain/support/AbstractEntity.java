@@ -22,14 +22,14 @@ import lombok.Setter;
 @MappedSuperclass
 @Getter
 @Setter
-public class AbstractEntity implements Serializable {
+public class AbstractEntity<ID> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private Long id;
+    private ID id;
 
     @Version
     @Column(name = "version")

@@ -60,9 +60,9 @@ public class PostDetails implements Serializable {
         setSlug(data.getSlug());
         setStatus(data.getStatus());
         setCreatedDate(data.getCreatedDate());
-        setCreatedBy(data.getCreatedBy());
+        setCreatedBy(data.getCreatedBy().getUsername());
         setLastModifiedDate(data.getLastModifiedDate());
-        setLastModifiedBy(data.getLastModifiedBy());
+        setLastModifiedBy(data.getLastModifiedBy().getUsername());
         
 //        Link self = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()).rel("self").uri("posts/{slug}").build(data.getSlug());
 //        Link comments = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()).rel("comments").uri("posts/{slug}/comments").build(data.getSlug());

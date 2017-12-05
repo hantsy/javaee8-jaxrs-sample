@@ -5,12 +5,10 @@
  */
 package com.github.hantsy.ee8sample.rest;
 
-import com.github.hantsy.ee8sample.aggregate.PostDetails;
-import com.github.hantsy.ee8sample.aggregate.PostSummary;
-import com.github.hantsy.ee8sample.aggregate.PostSummaryList;
 import com.github.hantsy.ee8sample.Constants;
 import com.github.hantsy.ee8sample.JaxrsActiviator;
 import com.github.hantsy.ee8sample.Resources;
+import com.github.hantsy.ee8sample.Utils;
 import com.github.hantsy.ee8sample.domain.Comment;
 import com.github.hantsy.ee8sample.domain.Comment_;
 import com.github.hantsy.ee8sample.domain.Favorite;
@@ -34,6 +32,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import static javax.ws.rs.client.Entity.json;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
@@ -83,12 +82,12 @@ public class PostResourceIT {
                 .addClasses(
                         Slug.class,
                         Slug_.class,
-                        Username.class, 
+                        Username.class,
                         Username_.class,
-                        Favorite.class, 
+                        Favorite.class,
                         Favorite_.class,
                         Post.class,
-                        Post_.class,                        
+                        Post_.class,
                         Comment.class,
                         Comment_.class,
                         PostRepository.class,
@@ -98,9 +97,9 @@ public class PostResourceIT {
                 //add service classes
                 .addClasses(
                         PostForm.class,
-//                        PostDetails.class,
-//                        PostSummary.class,
-//                        PostSummaryList.class,
+                        //                        PostDetails.class,
+                        //                        PostSummary.class,
+                        //                        PostSummaryList.class,
                         CommentForm.class,
                         CommentDetails.class
                 )
@@ -109,7 +108,8 @@ public class PostResourceIT {
                         JaxrsActiviator.class,
                         PostDataInitializer.class,
                         Constants.class,
-                        Resources.class
+                        Resources.class,
+                        Utils.class
                 )
                 //Add JAXRS resources classes
                 .addClasses(
@@ -164,7 +164,6 @@ public class PostResourceIT {
     private static final String CONTENT = "test_content";
 
     @Test
-    //@RunAsClient
     public void testPosts() throws MalformedURLException {
 
         LOG.log(Level.INFO, "base url @{0}", base);
@@ -173,9 +172,24 @@ public class PostResourceIT {
         final WebTarget targetGetAll = client.target(URI.create(new URL(base, "api/posts").toExternalForm()));
         try (Response resGetAll = targetGetAll.request().accept(MediaType.APPLICATION_JSON_TYPE).get()) {
             assertEquals(200, resGetAll.getStatus());
-            List<Post> results = resGetAll.readEntity(new GenericType<List<Post>>(){});
+            List<Post> results = resGetAll.readEntity(new GenericType<List<Post>>() {
+            });
             assertTrue(results != null);
             assertTrue(results.size() == 3);
+        }
+
+    }
+
+    @Test
+    public void createPostWithAuth_shouldReturn401() throws MalformedURLException {
+
+        LOG.log(Level.INFO, "base url @{0}", base);
+
+        //get all posts
+        final WebTarget targetGetAll = client.target(URI.create(new URL(base, "api/posts").toExternalForm()));
+        Post post = Post.builder().title("created title").content("created content").build();
+        try (Response resGetAll = targetGetAll.request().accept(MediaType.APPLICATION_JSON_TYPE).post(json(post))) {
+            assertEquals(401, resGetAll.getStatus());
         }
 
     }

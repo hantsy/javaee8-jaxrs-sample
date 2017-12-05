@@ -5,10 +5,14 @@
  */
 package com.github.hantsy.ee8sample.rest;
 
+import static com.github.hantsy.ee8sample.Constants.ROLE_ADMIN;
+import static com.github.hantsy.ee8sample.Constants.ROLE_USER;
 import com.github.hantsy.ee8sample.domain.Post;
 import com.github.hantsy.ee8sample.repository.CommentRepository;
 import com.github.hantsy.ee8sample.repository.FavoriteRepository;
 import com.github.hantsy.ee8sample.repository.PostRepository;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;
@@ -47,7 +51,6 @@ public class PostResource {
     @Inject
     FavoriteRepository favorites;
 
-    @Path("")
     @GET
     public Response getAllPosts(
             @QueryParam("q") String q,
@@ -67,7 +70,6 @@ public class PostResource {
                 .orElseThrow(() -> new PostNotFoundException(slug));
     }
 
-    @Path("")
     @POST
     public Response savePost(PostForm post) {
         Post entity = Post.builder()
@@ -108,12 +110,14 @@ public class PostResource {
 
     @Path("{slug}/comments")
     public CommentResource comments(@PathParam("slug") String slug) {
-        return resourceContext.initResource(new CommentResource(slug));
+        //return resourceContext.initResource(new CommentResource());
+        return resourceContext.getResource(CommentResource.class);
     }
 
     @Path("{slug}/favorites")
     public FavoriteResource favorites(@PathParam("slug") String slug) {
-        return resourceContext.initResource(new FavoriteResource(slug));
+        //return resourceContext.initResource(new FavoriteResource());
+        return resourceContext.getResource(FavoriteResource.class);
     }
 
 }

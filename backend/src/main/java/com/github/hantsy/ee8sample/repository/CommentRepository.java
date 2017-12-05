@@ -19,7 +19,7 @@ public class CommentRepository extends AbstractRepository<Comment, Long> {
     @PersistenceContext
     private EntityManager em;
 
-    public List<Comment> findByPost(String post) {
+    public List<Comment> findByPost(String post, long limit, long offset) {
 //        CriteriaBuilder cb = this.em.getCriteriaBuilder();
 //
 //        CriteriaQuery<Comment> q = cb.createQuery(Comment.class);
@@ -38,7 +38,9 @@ public class CommentRepository extends AbstractRepository<Comment, Long> {
 //        return query.getResultList();
         Objects.requireNonNull(post, "post slug can not be null");
         return this.stream()
-                .filter(c -> c.getPost().equals(post))
+                .filter(c -> c.getPost().getSlug().equals(post))
+                .limit(limit)
+                .skip(offset)
                 .collect(toList());
     }
 

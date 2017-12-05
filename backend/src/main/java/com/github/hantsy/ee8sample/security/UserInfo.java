@@ -5,6 +5,7 @@
  */
 package com.github.hantsy.ee8sample.security;
 
+import static java.util.Arrays.asList;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;
@@ -24,5 +25,17 @@ public class UserInfo {
 
     private String name;
     private Set<String> roles = new HashSet<>();
-    
+
+    public boolean isAuthenticated() {
+        return this.name != null;
+    }
+
+    public boolean hasRole(String _role) {
+        return this.roles.contains(_role);
+    }
+
+    public boolean hasAnyRoles(String... _roles) {
+        return this.roles.containsAll(asList(_roles));
+    }
+
 }

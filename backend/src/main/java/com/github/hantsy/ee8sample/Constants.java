@@ -19,12 +19,11 @@ public class Constants {
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     public static final String API_PREFIX = "/api";
-    public static final String APPLICATION_VND_JSON="application/vnd.blog-api.v1+json";
+    public static final String APPLICATION_VND_JSON = "application/vnd.blog-api.v1+json";
 
-    public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String AUTHORIZATION_PREFIX = "Bearer ";
 
-    public static final String BEARER = "Bearer ";
-
-    public static final int REMEMBERME_VALIDITY_SECONDS = 24 * 60 * 60; //24 hours
+    public static final int TOKEN_VALIDITY_SECONDS = 24 * 60 * 60; //24hrs
+    public static final int REMEMBERME_VALIDITY_SECONDS = 14 * 24 * 60 * 60; //2 weeks
 
 }
