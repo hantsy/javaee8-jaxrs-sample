@@ -29,6 +29,9 @@
         <version.arquillian-payara>1.0.Beta2</version.arquillian-payara>
         <version.jersey>2.26</version.jersey>
         <version.jsonwebtoken>0.8.0</version.jsonwebtoken>
+        
+        <junit.includes>**/*IT.java</junit.includes>
+        <junit.excludes></junit.excludes>
     </properties>
     
     <repositories>
@@ -266,6 +269,17 @@
                 </configuration>
             </plugin>
             <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>${junit.includes}</include>              
+                    </includes>
+                    <excludes>
+                        <exclude>${junit.excludes}</exclude>          
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
                 <version>2.19.1</version>
@@ -348,14 +362,15 @@
     
     <!-- Profiles for the application servers against which the samples are run -->
     <profiles>
-        
         <profile>
             <id>default</id>
-            
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            
+            <properties>
+                <junit.includes>**/*Test.java</junit.includes>
+                <junit.excludes>**/*IT.java</junit.excludes>
+            </properties>
         </profile>
         <!-- ###  PAYARA  ### -->
         <profile>
