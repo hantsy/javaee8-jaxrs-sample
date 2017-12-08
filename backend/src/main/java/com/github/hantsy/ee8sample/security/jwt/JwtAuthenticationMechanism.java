@@ -11,7 +11,7 @@ import com.github.hantsy.ee8sample.security.UserInfo;
 import io.jsonwebtoken.ExpiredJwtException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.security.enterprise.AuthenticationStatus;
@@ -34,7 +34,7 @@ import static com.github.hantsy.ee8sample.Constants.AUTHORIZATION_PREFIX;
         cookieMaxAgeSeconds = REMEMBERME_VALIDITY_SECONDS,
         isRememberMeExpression = "self.isRememberMe(httpMessageContext)"
 )
-@RequestScoped
+@ApplicationScoped
 public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
 
     @Inject

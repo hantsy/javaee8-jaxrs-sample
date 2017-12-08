@@ -15,17 +15,17 @@ import com.github.hantsy.ee8sample.domain.Username;
 import com.github.hantsy.ee8sample.repository.CommentRepository;
 import com.github.hantsy.ee8sample.repository.PostRepository;
 import com.github.hantsy.ee8sample.repository.UserRepository;
+import com.github.hantsy.ee8sample.security.hash.Crypto;
+import static com.github.hantsy.ee8sample.security.hash.Crypto.Type.BCRYPT;
+import com.github.hantsy.ee8sample.security.hash.PasswordEncoder;
 import static java.util.Arrays.asList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
-import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 
 /**
  *
@@ -48,27 +48,21 @@ public class Bootstrap {
     UserRepository users;
 
     @Inject
-    private Pbkdf2PasswordHash passwordHash;
+    @Crypto(BCRYPT)
+    private PasswordEncoder passwordHash;
 
     @PostConstruct
     public void init() {
         LOG.info("initializing database...");
-
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("Pbkdf2PasswordHash.Iterations", "3072");
-        parameters.put("Pbkdf2PasswordHash.Algorithm", "PBKDF2WithHmacSHA512");
-        parameters.put("Pbkdf2PasswordHash.SaltSizeBytes", "64");
-        passwordHash.initialize(parameters);
-
         User user = User.builder()
                 .username("user")
-                .password(passwordHash.generate("password".toCharArray()))
+                .password(passwordHash.encode("password"))
                 .authorities(Collections.unmodifiableSet(new HashSet<>(asList(ROLE_USER))))
                 .build();
 
         User admin = User.builder()
                 .username("admin")
-                .password(passwordHash.generate("password".toCharArray()))
+                .password(passwordHash.encode("password"))
                 .authorities(Collections.unmodifiableSet(new HashSet<>(asList(ROLE_USER, ROLE_ADMIN))))
                 .build();
         

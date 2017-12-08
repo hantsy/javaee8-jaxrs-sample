@@ -31,15 +31,9 @@ public class AbstractAuditableEntity extends AbstractEntity<Long> {
     @Column(name = "last_modified_at")
     private LocalDateTime lastModifiedDate;
 
-//    @ManyToOne()
-//    @JoinColumn(name="created_by")
-//    @Column(name = "created_by")
     @AttributeOverride(name = "username", column = @Column(name = "created_by"))
     private Username createdBy;
 
-//    @ManyToOne()
-//    @JoinColumn(name="updated_by")
-//    @Column(name = "last_modified_by")
     @AttributeOverride(name = "username", column = @Column(name = "last_modified_by"))
     private Username lastModifiedBy;
 }

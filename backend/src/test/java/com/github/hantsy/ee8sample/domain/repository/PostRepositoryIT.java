@@ -5,9 +5,9 @@
  */
 package com.github.hantsy.ee8sample.domain.repository;
 
+import com.github.hantsy.ee8sample.Utils;
 import com.github.hantsy.ee8sample.repository.PostRepository;
 import com.github.hantsy.ee8sample.domain.Post;
-import com.github.hantsy.ee8sample.domain.support.AbstractEntity;
 import java.util.List;
 import javax.inject.Inject;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -35,9 +35,9 @@ public class PostRepositoryIT {
     @Deployment(name = "test")
     public static Archive<?> createDeployment() {
         JavaArchive archive = ShrinkWrap.create(JavaArchive.class)
-                .addClasses(Post.class, PostRepository.class)
-                //domain.support package.
-                .addPackage(AbstractEntity.class.getPackage())
+                .addPackages(true, Post.class.getPackage(), PostRepository.class.getPackage())
+                // base classes
+                .addClasses(Utils.class)
                 .addAsManifestResource("META-INF/test-persistence.xml", "persistence.xml")
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
         // System.out.println(archive.toString(true));

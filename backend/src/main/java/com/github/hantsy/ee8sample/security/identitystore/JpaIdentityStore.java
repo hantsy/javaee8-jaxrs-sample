@@ -6,6 +6,9 @@
 package com.github.hantsy.ee8sample.security.identitystore;
 
 import com.github.hantsy.ee8sample.repository.UserRepository;
+import com.github.hantsy.ee8sample.security.hash.Crypto;
+import static com.github.hantsy.ee8sample.security.hash.Crypto.Type.BCRYPT;
+import com.github.hantsy.ee8sample.security.hash.PasswordEncoder;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +21,6 @@ import javax.security.enterprise.identitystore.CredentialValidationResult;
 import static javax.security.enterprise.identitystore.CredentialValidationResult.INVALID_RESULT;
 import static javax.security.enterprise.identitystore.CredentialValidationResult.NOT_VALIDATED_RESULT;
 import javax.security.enterprise.identitystore.IdentityStore;
-import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 
 /**
  *
@@ -34,7 +36,8 @@ public class JpaIdentityStore implements IdentityStore {
     private UserRepository users;
 
     @Inject
-    private Pbkdf2PasswordHash passwordHash;
+    @Crypto(BCRYPT)
+    private PasswordEncoder passwordHash;
 
     @PostConstruct
     public void init() {
@@ -49,12 +52,12 @@ public class JpaIdentityStore implements IdentityStore {
             UsernamePasswordCredential usernamePassword = (UsernamePasswordCredential) credential;
 
             result = users.findByUsername(usernamePassword.getCaller())
-                    .map(
-                            u -> passwordHash.verify(usernamePassword.getPassword().getValue(), u.getPassword())
-                            ? new CredentialValidationResult(usernamePassword.getCaller(), u.getAuthorities())
-                            : INVALID_RESULT
-                    )
-                    .orElse(INVALID_RESULT);
+                .map(
+                    u -> passwordHash.matches(new String(usernamePassword.getPassword().getValue()), u.getPassword())
+                    ? new CredentialValidationResult(usernamePassword.getCaller(), u.getAuthorities())
+                    : INVALID_RESULT
+                )
+                .orElse(INVALID_RESULT);
 
         } else {
             result = NOT_VALIDATED_RESULT;

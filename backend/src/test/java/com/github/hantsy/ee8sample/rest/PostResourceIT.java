@@ -5,24 +5,13 @@
  */
 package com.github.hantsy.ee8sample.rest;
 
+import com.github.hantsy.ee8sample.Bootstrap;
 import com.github.hantsy.ee8sample.Constants;
 import com.github.hantsy.ee8sample.JaxrsActiviator;
 import com.github.hantsy.ee8sample.Resources;
 import com.github.hantsy.ee8sample.Utils;
-import com.github.hantsy.ee8sample.domain.Comment;
-import com.github.hantsy.ee8sample.domain.Comment_;
-import com.github.hantsy.ee8sample.domain.Favorite;
-import com.github.hantsy.ee8sample.domain.Favorite_;
 import com.github.hantsy.ee8sample.domain.Post;
-import com.github.hantsy.ee8sample.domain.Post_;
-import com.github.hantsy.ee8sample.domain.Slug;
-import com.github.hantsy.ee8sample.domain.Slug_;
-import com.github.hantsy.ee8sample.domain.Username;
-import com.github.hantsy.ee8sample.domain.Username_;
-import com.github.hantsy.ee8sample.repository.CommentRepository;
-import com.github.hantsy.ee8sample.repository.FavoriteRepository;
 import com.github.hantsy.ee8sample.repository.PostRepository;
-import com.github.hantsy.ee8sample.domain.support.AbstractEntity;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -64,71 +53,55 @@ public class PostResourceIT {
     public static WebArchive createDeployment() {
 
         File[] extraJars = Maven.resolver().loadPomFromFile("pom.xml")
-                .resolve(
-                        "org.projectlombok:lombok:1.16.8",
-                        // "org.modelmapper:modelmapper:0.7.5",
-                        // "org.apache.commons:commons-lang3:3.4",
-                        // "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.6.3",
-                        "io.jsonwebtoken:jjwt:0.8.0"
-                )
-                .withTransitivity()
-                .asFile();
+            .resolve(
+                "org.projectlombok:lombok:1.16.8",
+                // "org.modelmapper:modelmapper:0.7.5",
+                // "org.apache.commons:commons-lang3:3.4",
+                // "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.6.3",
+                "io.jsonwebtoken:jjwt:0.8.0"
+            )
+            .withTransitivity()
+            .asFile();
 
         final WebArchive war = ShrinkWrap.create(WebArchive.class, "test.war")
-                .addAsLibraries(extraJars)
-                //domain.support package.
-                .addPackage(AbstractEntity.class.getPackage())
-                //domain.convert package.
-                .addClasses(
-                        Slug.class,
-                        Slug_.class,
-                        Username.class,
-                        Username_.class,
-                        Favorite.class,
-                        Favorite_.class,
-                        Post.class,
-                        Post_.class,
-                        Comment.class,
-                        Comment_.class,
-                        PostRepository.class,
-                        CommentRepository.class,
-                        FavoriteRepository.class
-                )
-                //add service classes
-                .addClasses(
-                        PostForm.class,
-                        //                        PostDetails.class,
-                        //                        PostSummary.class,
-                        //                        PostSummaryList.class,
-                        CommentForm.class,
-                        CommentDetails.class
-                )
-                //base classes
-                .addClasses(
-                        JaxrsActiviator.class,
-                        PostDataInitializer.class,
-                        Constants.class,
-                        Resources.class,
-                        Utils.class
-                )
-                //Add JAXRS resources classes
-                .addClasses(
-                        PostResource.class,
-                        FavoriteResource.class,
-                        CommentResource.class,
-                        PostNotFoundExceptionMapper.class,
-                        PostNotFoundException.class,
-                        CommentNotFoundExceptionMapper.class,
-                        CommentNotFoundException.class
-                )
-                // .addAsResource("test-log4j.properties", "log4j.properties")
-                //Add JPA persistence configration.
-                //WARN: In a war package, persistence.xml should be put into /WEB-INF/classes/META-INF/, not /META-INF
-                //.addAsManifestResource("META-INF/test-persistence.xml", "persistence.xml")
-                .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
-                // .addAsResource("META-INF/test-orm.xml", "META-INF/orm.xml")
-                // Enable CDI
-                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+            .addAsLibraries(extraJars)
+            //domain package.
+            .addPackages(true, Post.class.getPackage())
+            // repository package.
+            .addPackages(true, PostRepository.class.getPackage())
+
+            //base classes
+            .addClasses(
+                Bootstrap.class,
+                JaxrsActiviator.class,
+                PostDataInitializer.class,
+                Constants.class,
+                Resources.class,
+                Utils.class
+            )
+            //Add JAXRS resources classes
+            .addClasses(
+                PostForm.class,
+                PostResource.class,
+                FavoriteResource.class,
+                CommentForm.class,
+                CommentDetails.class,
+                CommentResource.class,
+                PostNotFoundExceptionMapper.class,
+                PostNotFoundException.class,
+                CommentNotFoundExceptionMapper.class,
+                CommentNotFoundException.class
+            )
+            // .addAsResource("test-log4j.properties", "log4j.properties")
+            //Add JPA persistence configration.
+            //WARN: In a war package, persistence.xml should be put into /WEB-INF/classes/META-INF/, not /META-INF
+            //.addAsManifestResource("META-INF/test-persistence.xml", "persistence.xml")
+            .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
+            // .addAsResource("META-INF/test-orm.xml", "META-INF/orm.xml")
+            
+            .addAsWebInfResource("test-web.xml", "web.xml")
+            // Enable CDI
+            .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
         //  .addAsWebInfResource("test-jboss-deployment-structure.xml", "jboss-deployment-structure.xml");
 
         LOG.log(Level.INFO, "war to string @{0}", war.toString(true));
@@ -181,11 +154,11 @@ public class PostResourceIT {
     }
 
     @Test
-    public void createPostWithAuth_shouldReturn401() throws MalformedURLException {
+    public void createPostWithoutAuth_shouldReturn401() throws MalformedURLException {
 
         LOG.log(Level.INFO, "base url @{0}", base);
 
-        //get all posts
+        //post
         final WebTarget targetGetAll = client.target(URI.create(new URL(base, "api/posts").toExternalForm()));
         Post post = Post.builder().title("created title").content("created content").build();
         try (Response resGetAll = targetGetAll.request().accept(MediaType.APPLICATION_JSON_TYPE).post(json(post))) {

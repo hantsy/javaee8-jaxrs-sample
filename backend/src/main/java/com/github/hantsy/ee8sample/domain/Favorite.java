@@ -11,6 +11,7 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,11 +34,17 @@ public class Favorite extends AbstractEntity {
 
     @Embedded
     @AttributeOverride(name = "slug", column = @Column(name = "post_slug"))
+    // @AttributeOverride(name = "title", column = @Column(name = "post_title"))
     private Slug post;
 
     private LocalDateTime createdDate;
 
     @Embedded
-    @AttributeOverride(name = "username", column = @Column(name = "user"))
+    @AttributeOverride(name = "username", column = @Column(name = "username"))
     private Username user;
+
+    @PrePersist
+    public void preSave() {
+        this.createdDate = LocalDateTime.now();
+    }
 }

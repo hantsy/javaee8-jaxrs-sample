@@ -5,14 +5,10 @@
  */
 package com.github.hantsy.ee8sample.rest;
 
-import static com.github.hantsy.ee8sample.Constants.ROLE_ADMIN;
-import static com.github.hantsy.ee8sample.Constants.ROLE_USER;
 import com.github.hantsy.ee8sample.domain.Post;
 import com.github.hantsy.ee8sample.repository.CommentRepository;
 import com.github.hantsy.ee8sample.repository.FavoriteRepository;
 import com.github.hantsy.ee8sample.repository.PostRepository;
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;
