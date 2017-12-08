@@ -31,8 +31,8 @@ import static com.github.hantsy.ee8sample.Constants.AUTHORIZATION_PREFIX;
  * @author hantsy
  */
 @RememberMe(
-        cookieMaxAgeSeconds = REMEMBERME_VALIDITY_SECONDS,
-        isRememberMeExpression = "self.isRememberMe(httpMessageContext)"
+    cookieMaxAgeSeconds = REMEMBERME_VALIDITY_SECONDS,
+    isRememberMeExpression = "self.isRememberMe(httpMessageContext)"
 )
 @ApplicationScoped
 public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
@@ -41,10 +41,8 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
     Logger LOGGER;
 
     /**
-     * Access to the
-     * IdentityStore(AuthenticationIdentityStore,AuthorizationIdentityStore) is
-     * abstracted by the IdentityStoreHandler to allow for multiple identity
-     * stores to logically act as a single IdentityStore
+     * Access to the IdentityStore(AuthenticationIdentityStore,AuthorizationIdentityStore) is abstracted by the
+     * IdentityStoreHandler to allow for multiple identity stores to logically act as a single IdentityStore
      */
     @Inject
     private IdentityStoreHandler identityStoreHandler;
@@ -67,7 +65,9 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
         String password = request.getParameter("password");
         String token = extractToken(context);
 
-        if (name != null && password != null) {
+        if (name != null && password != null
+            && "POST".equals(request.getMethod())
+            && request.getRequestURI().endsWith("/auth/login")) {
             LOGGER.log(Level.INFO, "credentials : {0}, {1}", new String[]{name, password});
             // validation of the credential using the identity store
             CredentialValidationResult result = identityStoreHandler.validate(new UsernamePasswordCredential(name, password));
@@ -91,8 +91,7 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
     }
 
     /**
-     * To validate the JWT token e.g Signature check, JWT claims
-     * check(expiration) etc
+     * To validate the JWT token e.g Signature check, JWT claims check(expiration) etc
      *
      * @param token The JWT access tokens
      * @param context
@@ -117,8 +116,7 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
     }
 
     /**
-     * Create the JWT using CredentialValidationResult received from
-     * IdentityStoreHandler
+     * Create the JWT using CredentialValidationResult received from IdentityStoreHandler
      *
      * @param result the result from validation of UsernamePasswordCredential
      * @param context
@@ -129,10 +127,10 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
             String jwt = tokenProvider.createToken(result.getCallerPrincipal().getName(), result.getCallerGroups(), false);
             context.getResponse().setHeader(HttpHeaders.AUTHORIZATION, AUTHORIZATION_PREFIX + jwt);
         }
-        
+
         //fire an @Authenticated CDI event.
-        authenticatedEvent.fire(new UserInfo(result.getCallerPrincipal().getName(), result.getCallerGroups()));    
-        
+        authenticatedEvent.fire(new UserInfo(result.getCallerPrincipal().getName(), result.getCallerGroups()));
+
         return context.notifyContainerAboutLogin(result.getCallerPrincipal(), result.getCallerGroups());
     }
 
@@ -152,8 +150,7 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
     }
 
     /**
-     * this function invoked using RememberMe.isRememberMeExpression EL
-     * expression
+     * this function invoked using RememberMe.isRememberMeExpression EL expression
      *
      * @param context
      * @return The remember me flag
