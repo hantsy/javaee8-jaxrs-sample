@@ -118,9 +118,6 @@ public class AuthResourceIT {
         client.close();
     }
 
-    private static final String TITLE = "test_title";
-    private static final String CONTENT = "test_content";
-
     @Test
     public void testAuthWithUser() throws MalformedURLException {
 
@@ -129,10 +126,10 @@ public class AuthResourceIT {
         //get an authentication
         final WebTarget targetAuth = client.target(URI.create(new URL(base, "api/auth/login").toExternalForm()));
         String token;
-        try (Response resAuth = targetAuth.request().post(form(new Form().param("name", "user").param("password", "password")))) {
+        try (Response resAuth = targetAuth.request().post(form(new Form().param("username", "user").param("password", "password")))) {
             assertEquals(200, resAuth.getStatus());
             token = (String) resAuth.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-            LOG.info("resAuth.getHeaders().getFirst(\"Bearer\"):" + token);
+            LOG.log(Level.INFO, "resAuth.getHeaders().getFirst(\"Bearer\"):{0}", token);
             assertTrue(token != null);
         }
 
@@ -141,7 +138,7 @@ public class AuthResourceIT {
         try (Response resUser = targetUser.request().accept(MediaType.APPLICATION_JSON_TYPE).get()) {
             assertEquals(200, resUser.getStatus());
             final UserInfo userInfo = resUser.readEntity(UserInfo.class);
-            LOG.log(Level.INFO, "get user info @" + userInfo);
+            LOG.log(Level.INFO, "get user info @{0}", userInfo);
             assertTrue("user".equals(userInfo.getName()));
         }
 
