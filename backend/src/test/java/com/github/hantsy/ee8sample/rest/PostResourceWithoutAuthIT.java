@@ -146,10 +146,22 @@ public class PostResourceWithoutAuthIT {
         LOG.log(Level.INFO, "base url @{0}", base);
 
         //post
-        final WebTarget targetGetAll = client.target(URI.create(new URL(base, "api/posts").toExternalForm()));
+        final WebTarget targetCreatePost = client.target(URI.create(new URL(base, "api/posts").toExternalForm()));
         Post post = Post.builder().title("created title").content("created content").build();
-        try (Response resGetAll = targetGetAll.request().accept(MediaType.APPLICATION_JSON_TYPE).post(json(post))) {
+        try (Response resGetAll = targetCreatePost.request().accept(MediaType.APPLICATION_JSON_TYPE).post(json(post))) {
             assertEquals(401, resGetAll.getStatus());
+        }
+
+    }
+    
+    @Test
+    public void getNonexistedPost_shouldReturn404() throws MalformedURLException {
+
+        LOG.log(Level.INFO, "base url @{0}", base);
+
+        final WebTarget targetGet = client.target(URI.create(new URL(base, "api/posts/non_existed").toExternalForm()));
+        try (Response resGetAll = targetGet.request().accept(MediaType.APPLICATION_JSON_TYPE).get()) {
+            assertEquals(404, resGetAll.getStatus());
         }
 
     }

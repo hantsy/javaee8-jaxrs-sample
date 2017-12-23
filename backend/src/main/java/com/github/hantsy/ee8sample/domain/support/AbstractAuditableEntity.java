@@ -16,6 +16,7 @@ import lombok.Setter;
 /**
  *
  * @author hantsy
+ * @param <ID>
  */
 @MappedSuperclass
 @Setter
