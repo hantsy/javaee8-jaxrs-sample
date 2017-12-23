@@ -21,7 +21,7 @@ import lombok.Setter;
 @Setter
 @Getter
 //@EntityListeners(AuditEntityListener.class)
-public class AbstractAuditableEntity extends AbstractEntity<Long> {
+public class AbstractAuditableEntity<ID> extends AbstractEntity<ID> {
 
     private static final long serialVersionUID = 1L;
 

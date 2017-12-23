@@ -5,6 +5,7 @@
  */
 package com.github.hantsy.ee8sample.rest;
 
+import com.github.hantsy.ee8sample.rest.auth.AuthResource;
 import com.github.hantsy.ee8sample.Bootstrap;
 import com.github.hantsy.ee8sample.Constants;
 import static com.github.hantsy.ee8sample.Constants.AUTHORIZATION_PREFIX;
@@ -12,7 +13,7 @@ import com.github.hantsy.ee8sample.JaxrsActiviator;
 import com.github.hantsy.ee8sample.Resources;
 import com.github.hantsy.ee8sample.Utils;
 import com.github.hantsy.ee8sample.domain.Post;
-import com.github.hantsy.ee8sample.repository.PostRepository;
+import com.github.hantsy.ee8sample.domain.repository.PostRepository;
 import com.github.hantsy.ee8sample.security.UserInfo;
 import java.io.File;
 import java.net.MalformedURLException;

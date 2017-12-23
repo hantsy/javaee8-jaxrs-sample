@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.hantsy.ee8sample.rest;
+package com.github.hantsy.ee8sample.rest.post;
 
 import java.io.Serializable;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 /**
  *
@@ -20,18 +20,10 @@ import lombok.RequiredArgsConstructor;
 @Data
 @Builder
 @NoArgsConstructor
-@RequiredArgsConstructor
-public class PostForm implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
+@AllArgsConstructor
+public class CommentForm implements Serializable{
+    
+    @NotNull
     @NotBlank
-    @NonNull
-    private String title;
-
-    @NotBlank
-    @NonNull
     private String content;
-
 }
-

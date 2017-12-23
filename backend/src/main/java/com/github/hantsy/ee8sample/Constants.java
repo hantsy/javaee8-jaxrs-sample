@@ -19,7 +19,7 @@ public class Constants {
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     public static final String API_PREFIX = "/api";
-    public static final String APPLICATION_VND_JSON = "application/vnd.blog-api.v1+json";
+    public static final String APPLICATION_VND_BLOG_JSON = "application/vnd.blog-api.v1+json";
 
     public static final String AUTHORIZATION_PREFIX = "Bearer ";
 

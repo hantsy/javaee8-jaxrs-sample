@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.hantsy.ee8sample.rest;
+package com.github.hantsy.ee8sample.rest.auth;
 
 import com.github.hantsy.ee8sample.security.Authenticated;
 import com.github.hantsy.ee8sample.security.UserInfo;
@@ -15,6 +15,7 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.security.enterprise.SecurityContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -27,7 +28,6 @@ import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
  * @author hantsy
  */
 @Path("auth")
-@RequestScoped
 public class AuthResource {
 
     @Inject

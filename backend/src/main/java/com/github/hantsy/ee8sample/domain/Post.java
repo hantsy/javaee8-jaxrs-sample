@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post extends AbstractAuditableEntity {
+public class Post extends AbstractAuditableEntity<Long> {
 
     /**
      *

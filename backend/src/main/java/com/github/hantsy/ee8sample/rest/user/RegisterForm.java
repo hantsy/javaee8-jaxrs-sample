@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.hantsy.ee8sample.rest;
+package com.github.hantsy.ee8sample.rest.user;
 
 import java.io.Serializable;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,9 +21,21 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentForm implements Serializable{
-    
-    @NotNull
+public class RegisterForm implements Serializable {
+
     @NotBlank
-    private String content;
+    private String username;
+
+    @NotBlank
+    private String password;
+
+    @NotBlank
+    private String firstName;
+
+    @NotBlank
+    private String lastName;
+
+    @Email
+    @NotBlank
+    private String email;
 }

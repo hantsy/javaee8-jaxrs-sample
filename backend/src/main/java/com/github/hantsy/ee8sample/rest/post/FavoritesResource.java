@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.hantsy.ee8sample.rest;
+package com.github.hantsy.ee8sample.rest.post;
 
 import com.github.hantsy.ee8sample.domain.Favorite;
 import com.github.hantsy.ee8sample.domain.Slug;
 import com.github.hantsy.ee8sample.domain.Username;
-import com.github.hantsy.ee8sample.repository.FavoriteRepository;
+import com.github.hantsy.ee8sample.domain.repository.FavoriteRepository;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
 import javax.ejb.Stateless;
@@ -28,7 +28,7 @@ import javax.ws.rs.core.Response;
  */
 //@Path("favorites")
 @Stateless
-public class FavoriteResource {
+public class FavoritesResource {
 
     @PathParam("slug")
     private String slug;

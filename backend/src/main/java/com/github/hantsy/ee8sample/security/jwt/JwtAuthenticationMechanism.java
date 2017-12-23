@@ -61,14 +61,14 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
         // Get the (caller) name and password from the request
         // NOTE: This is for the smallest possible example only. In practice
         // putting the password in a request query parameter is highly insecure
-        String name = request.getParameter("name");
+        String name = request.getParameter("username");
         String password = request.getParameter("password");
         String token = extractToken(context);
 
         if (name != null && password != null
             && "POST".equals(request.getMethod())
             && request.getRequestURI().endsWith("/auth/login")) {
-            LOGGER.log(Level.INFO, "credentials : {0}, {1}", new String[]{name, password});
+            LOGGER.log(Level.INFO, "user credentials : {0}, {1}", new String[]{name, password});
             // validation of the credential using the identity store
             CredentialValidationResult result = identityStoreHandler.validate(new UsernamePasswordCredential(name, password));
             if (result.getStatus() == CredentialValidationResult.Status.VALID) {

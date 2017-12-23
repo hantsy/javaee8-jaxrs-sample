@@ -6,7 +6,7 @@
 package com.github.hantsy.ee8sample.aggregate;
 
 import com.github.hantsy.ee8sample.domain.Post;
-import com.github.hantsy.ee8sample.rest.PostNotFoundException;
+import com.github.hantsy.ee8sample.rest.post.PostNotFoundException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Queue;

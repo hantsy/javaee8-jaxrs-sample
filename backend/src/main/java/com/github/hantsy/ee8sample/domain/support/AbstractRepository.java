@@ -17,6 +17,8 @@ import javax.persistence.criteria.Root;
 /**
  *
  * @author hantsy
+ * @param <T>
+ * @param <ID>
  */
 public abstract class AbstractRepository<T extends AbstractEntity, ID> {
 

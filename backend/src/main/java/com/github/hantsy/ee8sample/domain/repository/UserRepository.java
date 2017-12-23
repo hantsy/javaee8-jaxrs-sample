@@ -1,4 +1,4 @@
-package com.github.hantsy.ee8sample.repository;
+package com.github.hantsy.ee8sample.domain.repository;
 
 import com.github.hantsy.ee8sample.domain.User;
 import com.github.hantsy.ee8sample.domain.support.AbstractRepository;
@@ -23,6 +23,11 @@ public class UserRepository extends AbstractRepository<User, Long> {
     public Optional<User> findByUsername(String caller) {
         Objects.requireNonNull(caller, "username can not be null");
         return this.stream().filter(u -> u.getUsername().equals(caller)).findFirst();
+    }
+
+    public Optional<User> findByEmail(String email) {
+        Objects.requireNonNull(email, "email can not be null");
+        return this.stream().filter(u -> u.getEmail().equals(email)).findFirst();
     }
 
 }

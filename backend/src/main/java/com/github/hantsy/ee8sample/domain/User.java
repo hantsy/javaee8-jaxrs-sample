@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,10 +29,17 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends AbstractEntity {
+public class User extends AbstractEntity<Long> {
 
     private String username;
     private String password;
+    
+  
+    private String firstName;
+    private String lastName;
+
+    @Email
+    private String email;
 
     @ElementCollection()
     private Set<String> authorities = new HashSet<>();

@@ -5,7 +5,7 @@
  */
 package com.github.hantsy.ee8sample.security.identitystore;
 
-import com.github.hantsy.ee8sample.repository.UserRepository;
+import com.github.hantsy.ee8sample.domain.repository.UserRepository;
 import com.github.hantsy.ee8sample.security.hash.Crypto;
 import static com.github.hantsy.ee8sample.security.hash.Crypto.Type.BCRYPT;
 import com.github.hantsy.ee8sample.security.hash.PasswordEncoder;

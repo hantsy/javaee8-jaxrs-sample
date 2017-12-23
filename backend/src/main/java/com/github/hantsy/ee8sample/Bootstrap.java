@@ -12,15 +12,16 @@ import com.github.hantsy.ee8sample.domain.Post;
 import com.github.hantsy.ee8sample.domain.Slug;
 import com.github.hantsy.ee8sample.domain.User;
 import com.github.hantsy.ee8sample.domain.Username;
-import com.github.hantsy.ee8sample.repository.CommentRepository;
-import com.github.hantsy.ee8sample.repository.PostRepository;
-import com.github.hantsy.ee8sample.repository.UserRepository;
+import com.github.hantsy.ee8sample.domain.repository.CommentRepository;
+import com.github.hantsy.ee8sample.domain.repository.PostRepository;
+import com.github.hantsy.ee8sample.domain.repository.UserRepository;
 import com.github.hantsy.ee8sample.security.hash.Crypto;
 import static com.github.hantsy.ee8sample.security.hash.Crypto.Type.BCRYPT;
 import com.github.hantsy.ee8sample.security.hash.PasswordEncoder;
 import static java.util.Arrays.asList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
@@ -55,48 +56,52 @@ public class Bootstrap {
     public void init() {
         LOG.info("initializing database...");
         User user = User.builder()
-                .username("user")
-                .password(passwordHash.encode("password"))
-                .authorities(Collections.unmodifiableSet(new HashSet<>(asList(ROLE_USER))))
-                .build();
+            .username("user")
+            .password(passwordHash.encode("password"))
+            .authorities(Collections.unmodifiableSet(new HashSet<>(asList(ROLE_USER))))
+            .build();
 
         User admin = User.builder()
-                .username("admin")
-                .password(passwordHash.encode("password"))
-                .authorities(Collections.unmodifiableSet(new HashSet<>(asList(ROLE_USER, ROLE_ADMIN))))
-                .build();
-        
+            .username("admin")
+            .password(passwordHash.encode("password"))
+            .authorities(Collections.unmodifiableSet(new HashSet<>(asList(ROLE_USER, ROLE_ADMIN))))
+            .build();
+
         users.save(user);
         users.save(admin);
 
         Post post1 = Post.builder()
-                .title("Build RESTful APIs with JAXRS 2.1")
-                .content("Content of Getting started with REST")
-                .build();
+            .title("Build RESTful APIs with JAXRS 2.1")
+            .content("Content of Getting started with REST")
+            .build();
         post1.setCreatedBy(new Username("user"));
         posts.save(post1);
 
         Post post2 = Post.builder()
-                .title("Getting started with Java EE 8")
-                .content("Content of Getting started with Java EE 8")
-                .build();
+            .title("Getting started with Java EE 8")
+            .content("Content of Getting started with Java EE 8")
+            .build();
         post2.setCreatedBy(new Username("user"));
         posts.save(post2);
 
         Post post3 = Post.builder()
-                .title("Getting started with Angular2")
-                .content("Content of Getting started with Angular2")
-                .build();
+            .title("Getting started with Angular")
+            .content("Content of Getting started with Angular")
+            .build();
         post3.setCreatedBy(new Username("user"));
         post3 = posts.save(post3);
 
         Comment comment = Comment.builder()
-                .content("Awesome!\n Good post.")
-                .build();
+            .content("Awesome!\n Good post.")
+            .build();
 
         comment.setPost(new Slug(post3.getSlug()));
         comment.setCreatedBy(new Username("user"));
         comments.save(comment);
 
+        LOG.info("data initilization done.");
+        LOG.log(Level.INFO, "all uesrs :: {0}", users.findAll());
+        LOG.log(Level.INFO, "all posts :: {0}", posts.findAll());
+        LOG.log(Level.INFO, "all comments :: {0}", comments.findAll());
     }
 }

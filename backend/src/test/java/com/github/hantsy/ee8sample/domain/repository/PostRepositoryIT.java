@@ -6,7 +6,6 @@
 package com.github.hantsy.ee8sample.domain.repository;
 
 import com.github.hantsy.ee8sample.Utils;
-import com.github.hantsy.ee8sample.repository.PostRepository;
 import com.github.hantsy.ee8sample.domain.Post;
 import java.util.List;
 import javax.inject.Inject;

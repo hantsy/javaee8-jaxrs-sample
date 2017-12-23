@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.hantsy.ee8sample.rest;
+package com.github.hantsy.ee8sample.rest.user;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -14,11 +14,11 @@ import javax.ws.rs.ext.Provider;
  * @author hantsy
  */
 @Provider
-public class PostNotFoundExceptionMapper implements ExceptionMapper<PostNotFoundException> {
+public class UsernameWasTakenExceptionMapper implements ExceptionMapper<UsernameWasTakenException> {
 
     @Override
-    public Response toResponse(PostNotFoundException exception) {
-        return Response.status(Response.Status.NOT_FOUND)
+    public Response toResponse(UsernameWasTakenException exception) {
+        return Response.status(Response.Status.CONFLICT)
             .entity(exception.getMessage())
             .build();
     }

@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.hantsy.ee8sample.rest;
+package com.github.hantsy.ee8sample.rest.post;
 
 import com.github.hantsy.ee8sample.domain.Comment;
 import com.github.hantsy.ee8sample.domain.Slug;
-import com.github.hantsy.ee8sample.repository.CommentRepository;
+import com.github.hantsy.ee8sample.domain.repository.CommentRepository;
+import java.util.List;
+import static java.util.stream.Collectors.toList;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;
@@ -28,9 +30,8 @@ import javax.ws.rs.core.UriInfo;
  *
  * @author hantsy
  */
-//@Path("comments")
 @Stateless
-public class CommentResource {
+public class CommentsResource {
 
     @PathParam("slug")
     private String slug;
@@ -41,15 +42,19 @@ public class CommentResource {
     @Context
     UriInfo uriInfo;
 
-    public CommentResource() {
+    public CommentsResource() {
     }
 
     @GET
     public Response allCommentsOfPost(
-            @QueryParam("limit") @DefaultValue("10") int limit,
-            @QueryParam("offset") @DefaultValue("0") int offset
+        @QueryParam("limit") @DefaultValue("50") int limit,
+        @QueryParam("offset") @DefaultValue("0") int offset
     ) {
-        return Response.ok(comments.findByPost(slug, limit, offset)).build();
+        List<CommentDetails> all = comments.findByPost(slug, limit, offset)
+            .map(c -> toDetails(c))
+            .collect(toList());
+
+        return Response.ok(all).build();
     }
 
     @Path("count")
@@ -64,27 +69,23 @@ public class CommentResource {
         Comment comment = Comment.builder().post(new Slug(slug)).content(form.getContent()).build();
         Comment saved = comments.save(comment);
         return Response
-                .created(
-                        uriInfo.getBaseUriBuilder()
-                                .path("{commentId}")
-                                .build(saved.getId())
-                )
-                .build();
+            .created(
+                uriInfo.getBaseUriBuilder()
+                    .path("/posts/{slug}/comments/{commentId}")
+                    .build(slug, saved.getId())
+            )
+            .build();
     }
 
     @Path("{commentId}")
     @GET
     public Response getCommentById(@PathParam("commentId") Long commentId) {
         return comments.findOptionalById(commentId)
-                .map(
-                        c -> CommentDetails.builder()
-                                .slug(c.getPost().getSlug())
-                                .content(c.getContent())
-                                //.createdBy(c.getCreatedBy())
-                                .build()
-                )
-                .map(c -> Response.ok(c).build())
-                .orElseThrow(() -> new CommentNotFoundException(commentId));
+            .map(
+                c -> toDetails(c)
+            )
+            .map(c -> Response.ok(c).build())
+            .orElseThrow(() -> new CommentNotFoundException(commentId));
 
     }
 
@@ -92,15 +93,15 @@ public class CommentResource {
     @PUT
     public Response updateComment(@PathParam("commentId") Long commentId, CommentForm form) {
         return comments.findOptionalById(commentId)
-                .map(
-                        c -> {
-                            c.setContent(form.getContent());
-                            return c;
-                        }
-                )
-                .map(c -> comments.save(c))
-                .map((Comment c) -> Response.noContent().build())
-                .orElseThrow(() -> new CommentNotFoundException(commentId));
+            .map(
+                c -> {
+                    c.setContent(form.getContent());
+                    return c;
+                }
+            )
+            .map(c -> comments.save(c))
+            .map((Comment c) -> Response.noContent().build())
+            .orElseThrow(() -> new CommentNotFoundException(commentId));
 
     }
 
@@ -108,10 +109,18 @@ public class CommentResource {
     @DELETE
     public Response deleteComment(@PathParam("commentId") Long commentId) {
         return comments.findOptionalById(commentId)
-                .map(c -> comments.delete(c))
-                .map(c -> Response.noContent().build())
-                .orElseThrow(() -> new CommentNotFoundException(commentId));
+            .map(c -> comments.delete(c))
+            .map(c -> Response.noContent().build())
+            .orElseThrow(() -> new CommentNotFoundException(commentId));
 
+    }
+
+    CommentDetails toDetails(Comment c) {
+        return CommentDetails.builder()
+            .content(c.getContent())
+            .createdBy(c.getCreatedBy())
+            .createdDate(c.getCreatedDate())
+            .build();
     }
 
 }

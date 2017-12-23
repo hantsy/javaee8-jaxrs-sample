@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Comment extends AbstractAuditableEntity {
+public class Comment extends AbstractAuditableEntity<Long> {
 
     private static final long serialVersionUID = 1L;
 

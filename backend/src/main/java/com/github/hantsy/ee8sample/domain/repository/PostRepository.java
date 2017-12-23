@@ -1,4 +1,4 @@
-package com.github.hantsy.ee8sample.repository;
+package com.github.hantsy.ee8sample.domain.repository;
 
 import com.github.hantsy.ee8sample.domain.Post;
 import com.github.hantsy.ee8sample.domain.support.AbstractRepository;
