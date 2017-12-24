@@ -6,8 +6,6 @@
 package com.github.hantsy.ee8sample.rest.post;
 
 import com.github.hantsy.ee8sample.domain.Post;
-import com.github.hantsy.ee8sample.domain.repository.CommentRepository;
-import com.github.hantsy.ee8sample.domain.repository.FavoriteRepository;
 import com.github.hantsy.ee8sample.domain.repository.PostRepository;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
