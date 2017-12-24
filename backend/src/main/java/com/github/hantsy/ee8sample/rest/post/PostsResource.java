@@ -18,6 +18,8 @@ import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.Produces;
+import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
 /**
  *
@@ -38,24 +40,29 @@ public class PostsResource {
 
     @GET
     public Response getAllPosts(
-            @QueryParam("q") String q,
-            @QueryParam("limit") @DefaultValue("10") int limit,
-            @QueryParam("offset") @DefaultValue("0") int offset
+        @QueryParam("q") String q,
+        @QueryParam("limit") @DefaultValue("10") int limit,
+        @QueryParam("offset") @DefaultValue("0") int offset
     ) {
-
         return Response.ok(this.posts.findByKeyword(q, limit, offset)).build();
+    }
+
+    @GET
+    @Path("count")
+    @Produces(TEXT_PLAIN)
+    public Response getAllPosts(@QueryParam("q") String q) {
+        return Response.ok(this.posts.countByKeyword(q)).build();
     }
 
     @POST
     public Response savePost(PostForm post) {
         Post entity = Post.builder()
-                .title(post.getTitle())
-                .content(post.getContent())
-                .build();
+            .title(post.getTitle())
+            .content(post.getContent())
+            .build();
         Post saved = this.posts.save(entity);
         return Response.created(uriInfo.getBaseUriBuilder().path("posts/{slug}").build(saved.getSlug())).build();
     }
-
 
     @Path("{slug}")
     public PostResource postResource() {

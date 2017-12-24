@@ -8,6 +8,7 @@ package com.github.hantsy.ee8sample.aggregate;
 import com.github.hantsy.ee8sample.domain.Post;
 import java.util.ArrayList;
 import java.util.List;
+import javax.json.bind.annotation.JsonbProperty;
 import javax.ws.rs.core.Link;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +33,7 @@ public class PostSummary {
 
     private long commentsCount;
 
+    @JsonbProperty("_links")
     private List<Link> links = new ArrayList<>();
 
     public PostSummary(Post post) {

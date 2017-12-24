@@ -7,7 +7,7 @@
     <persistence-unit-metadata>
         <persistence-unit-defaults>
             <entity-listeners>
-<!--                <entity-listener class="com.github.hantsy.ee8sample.support.AuditEntityListener" />-->
+              <entity-listener class="com.github.hantsy.ee8sample.domain.support.AuditEntityListener" />
             </entity-listeners>
         </persistence-unit-defaults>
     </persistence-unit-metadata>

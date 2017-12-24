@@ -48,18 +48,18 @@ public class FavoritesResource {
     @POST
     public Response favoritePost() {
         return favorites.findBySlugAndUsername(slug, securityContext.getCallerPrincipal().getName())
-                .map(
-                        f -> {
-                            favorites.delete(f);
-                            return Response.ok().build();
-                        }
-                )
-                .orElseGet(
-                        () -> {
-                            favorites.save(Favorite.builder().post(new Slug(slug)).user(new Username(securityContext.getCallerPrincipal().getName())).build());
-                            return Response.ok().build();
-                        }
-                );
+            .map(
+                f -> {
+                    favorites.delete(f);
+                    return Response.ok().build();
+                }
+            )
+            .orElseGet(
+                () -> {
+                    favorites.save(Favorite.builder().post(new Slug(slug)).user(new Username(securityContext.getCallerPrincipal().getName())).build());
+                    return Response.ok().build();
+                }
+            );
     }
 
     @GET

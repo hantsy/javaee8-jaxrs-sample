@@ -16,7 +16,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         
         <!-- cargo plugin -->
-        <cargo.container.id>glassfish4x</cargo.container.id>
+        <cargo.maven.containerId>glassfish4x</cargo.maven.containerId>
         <glassfish.home>${basedir}/target/cargo/installs/glassfish</glassfish.home>
         <cargo.maven.containerUrl>http://download.oracle.com/glassfish/5.0/release/glassfish-5.0.zip</cargo.maven.containerUrl>
         
@@ -24,8 +24,8 @@
         <version.eclipselink>2.7.0</version.eclipselink>
         <version.mockito>2.10.0</version.mockito>
         <version.glassfish>5.0</version.glassfish>
-        <version.payara>5.0.0.Alpha3</version.payara>
-        <version.arquillian-glassfish>1.0.1</version.arquillian-glassfish>
+        <version.payara>5.Beta1</version.payara>
+        <version.arquillian-glassfish>1.0.2</version.arquillian-glassfish>
         <version.arquillian-payara>1.0.Beta2</version.arquillian-payara>
         <version.jersey>2.26</version.jersey>
         <version.jsonwebtoken>0.8.0</version.jsonwebtoken>
@@ -279,11 +279,11 @@
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
                 <artifactId>cargo-maven2-plugin</artifactId>
-                <version>1.6.4</version>
+                <version>1.6.5</version>
                 <inherited>true</inherited>
                 <configuration>
                     <container>
-                        <containerId>${cargo.container.id}</containerId>
+                        <containerId>${cargo.maven.containerId}</containerId>
                         <type>installed</type>
                         <home>${glassfish.home}</home>
                     </container>
@@ -329,19 +329,32 @@
         </profile>
         <!-- ###  PAYARA  ### -->
         <profile>
-            <id>payara-managed</id>
-            
-            <!--            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>-->
-            
-            <dependencies>
-                
+            <id>payara-managed</id>        
+            <dependencies>              
                 <!-- Yasson (JSON-B RI) -->   
                 <dependency>
                     <groupId>org.eclipse</groupId>
                     <artifactId>yasson</artifactId>
                     <version>1.0</version>
+                    <scope>test</scope>
+                </dependency>
+                
+                 <dependency>
+                    <groupId>org.glassfish.jersey.media</groupId>
+                    <artifactId>jersey-media-sse</artifactId>
+                    <version>${version.jersey}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.glassfish.jersey.media</groupId>
+                    <artifactId>jersey-media-json-binding</artifactId>
+                    <version>${version.jersey}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.glassfish.jersey.inject</groupId>
+                    <artifactId>jersey-hk2</artifactId>
+                    <version>${version.jersey}</version>
                     <scope>test</scope>
                 </dependency>
                 
@@ -359,25 +372,7 @@
                     <scope>test</scope>
                 </dependency>
                 
-                <dependency>
-                    <groupId>org.glassfish.jersey.media</groupId>
-                    <artifactId>jersey-media-sse</artifactId>
-                    <version>${version.jersey}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.glassfish.jersey.media</groupId>
-                    <artifactId>jersey-media-json-jackson</artifactId>
-                    <version>${version.jersey}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.glassfish.jersey.inject</groupId>
-                    <artifactId>jersey-hk2</artifactId>
-                    <version>${version.jersey}</version>
-                    <scope>test</scope>
-                </dependency>
-                              
+                                           
                 <!-- WebSocket client dependencies -->
                 <dependency>
                     <groupId>org.glassfish.tyrus</groupId>
@@ -457,6 +452,31 @@
                     <scope>test</scope>
                 </dependency>
                 <dependency>
+                    <groupId>org.eclipse</groupId>
+                    <artifactId>yasson</artifactId>
+                    <version>1.0</version>
+                    <scope>test</scope>
+                </dependency>
+                
+                 <dependency>
+                    <groupId>org.glassfish.jersey.media</groupId>
+                    <artifactId>jersey-media-sse</artifactId>
+                    <version>${version.jersey}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.glassfish.jersey.media</groupId>
+                    <artifactId>jersey-media-json-binding</artifactId>
+                    <version>${version.jersey}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.glassfish.jersey.inject</groupId>
+                    <artifactId>jersey-hk2</artifactId>
+                    <version>${version.jersey}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
                     <groupId>org.glassfish</groupId>
                     <artifactId>javax.json</artifactId>
                     <version>1.1</version>
@@ -516,22 +536,8 @@
                     <version>${version.arquillian-payara}</version>
                 </dependency>
             </dependencies>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <systemPropertyVariables>
-                                <javaEEServer>payara-remote</javaEEServer>
-                            </systemPropertyVariables>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
-        
-        
-        
+                
         <!-- ###  GLASSFISH  ### -->
         <profile>
             <id>glassfish-embedded</id>
@@ -540,6 +546,31 @@
                     <groupId>org.glassfish.main.extras</groupId>
                     <artifactId>glassfish-embedded-all</artifactId>
                     <version>${version.glassfish}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.eclipse</groupId>
+                    <artifactId>yasson</artifactId>
+                    <version>1.0</version>
+                    <scope>test</scope>
+                </dependency>
+                
+                 <dependency>
+                    <groupId>org.glassfish.jersey.media</groupId>
+                    <artifactId>jersey-media-sse</artifactId>
+                    <version>${version.jersey}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.glassfish.jersey.media</groupId>
+                    <artifactId>jersey-media-json-binding</artifactId>
+                    <version>${version.jersey}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.glassfish.jersey.inject</groupId>
+                    <artifactId>jersey-hk2</artifactId>
+                    <version>${version.jersey}</version>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
@@ -613,6 +644,31 @@
             <id>glassfish-remote</id>
             <dependencies>
                 <dependency>
+                    <groupId>org.eclipse</groupId>
+                    <artifactId>yasson</artifactId>
+                    <version>1.0</version>
+                    <scope>test</scope>
+                </dependency>
+                
+                 <dependency>
+                    <groupId>org.glassfish.jersey.media</groupId>
+                    <artifactId>jersey-media-sse</artifactId>
+                    <version>${version.jersey}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.glassfish.jersey.media</groupId>
+                    <artifactId>jersey-media-json-binding</artifactId>
+                    <version>${version.jersey}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.glassfish.jersey.inject</groupId>
+                    <artifactId>jersey-hk2</artifactId>
+                    <version>${version.jersey}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
                     <groupId>org.glassfish</groupId>
                     <artifactId>javax.json</artifactId>
                     <version>1.0.4</version>
@@ -637,18 +693,6 @@
                     <scope>test</scope>
                 </dependency>
                 <dependency>
-                    <groupId>org.glassfish.jersey.media</groupId>
-                    <artifactId>jersey-media-json-jackson</artifactId>
-                    <version>${version.jersey}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.glassfish.jersey.media</groupId>
-                    <artifactId>jersey-media-json-processing</artifactId>
-                    <version>${version.jersey}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
                     <groupId>org.jboss.arquillian.container</groupId>
                     <artifactId>arquillian-glassfish-remote-3.1</artifactId>
                     <version>${version.arquillian-glassfish}</version>
@@ -656,16 +700,6 @@
                 </dependency>
             </dependencies>
             <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <systemPropertyVariables>
-                                <javaEEServer>glassfish-remote</javaEEServer>
-                            </systemPropertyVariables>
-                        </configuration>
-                    </plugin>
-                </plugins>
                 <testResources>
                     <testResource>
                         <directory>src/test/resources</directory>
