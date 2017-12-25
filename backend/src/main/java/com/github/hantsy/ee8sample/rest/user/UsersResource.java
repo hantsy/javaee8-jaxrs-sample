@@ -5,26 +5,26 @@
  */
 package com.github.hantsy.ee8sample.rest.user;
 
+import com.github.hantsy.ee8sample.domain.Count;
+import com.github.hantsy.ee8sample.domain.Existed;
 import com.github.hantsy.ee8sample.domain.User;
 import com.github.hantsy.ee8sample.domain.repository.UserRepository;
 import com.github.hantsy.ee8sample.security.hash.Crypto;
 import static com.github.hantsy.ee8sample.security.hash.Crypto.Type.BCRYPT;
 import com.github.hantsy.ee8sample.security.hash.PasswordEncoder;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import javax.annotation.Resource;
 import javax.ejb.Stateless;
-import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.inject.Inject;
-import javax.validation.Valid;
+import javax.security.enterprise.SecurityContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import static javax.ws.rs.core.Response.ok;
 import javax.ws.rs.core.UriInfo;
 
 /**
@@ -33,6 +33,7 @@ import javax.ws.rs.core.UriInfo;
  */
 @Path("users")
 @Stateless
+@Produces(MediaType.APPLICATION_JSON)
 public class UsersResource {
 
     @Context
@@ -41,34 +42,56 @@ public class UsersResource {
     @Inject
     UserRepository users;
 
-    @Resource
-    ManagedExecutorService executor;
-
     @Context
     ResourceContext resourceContext;
-    
-    @Inject 
+
+    @Inject
+    SecurityContext securityContext;
+
+    @Inject
     @Crypto(BCRYPT)
     PasswordEncoder passwordEncoder;
-    
+
     @GET
-    public CompletionStage<List<User>> allUsers() {
-        return CompletableFuture.supplyAsync(
-            () -> users.findAll(), executor
-        );
+    public Response all() {
+        return ok(users.findAll()).build();
+    }
+
+    @GET
+    @Path("count")
+    public Response count() {
+        return ok(
+            Count.builder().count(users.stream().count()).build()
+        ).build();
+    }
+
+    @GET
+    @Path("exists")
+    public Response exists(@QueryParam("username") String username, @QueryParam("email") String email) {
+        if (username != null && username.length() > 0) {
+            return ok(Existed.builder().existed(users.findByUsername(username).isPresent()).build()).build();
+        }
+
+        if (email != null && email.length() > 0) {
+            return ok(Existed.builder().existed(users.findByEmail(email).isPresent()).build()).build();
+        }
+
+        return Response.status(Response.Status.BAD_REQUEST).entity("username or email query params is required").build();
     }
 
     @POST
-    public Response createUser(@Valid RegisterForm form) {
-        
-        if(users.findByUsername(form.getUsername()).isPresent()){
+    // there is a bug when adding @Valid to request form data
+    // https://github.com/javaee/glassfish/issues/22317
+    public Response createUser(RegisterForm form) {
+
+        if (users.findByUsername(form.getUsername()).isPresent()) {
             throw new UsernameWasTakenException(form.getUsername());
         }
-        
-        if(users.findByEmail(form.getEmail()).isPresent()){
+
+        if (users.findByEmail(form.getEmail()).isPresent()) {
             throw new EmailWasTakenException(form.getEmail());
         }
-        
+
         User user = User.builder()
             .username(form.getUsername())
             .password(passwordEncoder.encode(form.getPassword()))

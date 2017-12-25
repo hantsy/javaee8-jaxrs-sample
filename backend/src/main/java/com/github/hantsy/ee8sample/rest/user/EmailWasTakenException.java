@@ -12,7 +12,7 @@ package com.github.hantsy.ee8sample.rest.user;
 public class EmailWasTakenException extends RuntimeException {
 
     public EmailWasTakenException(String email) {
-        super(email + " was taken by others");
+        super(email + " was already taken by others");
     }
     
 }

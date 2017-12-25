@@ -6,9 +6,7 @@
 package com.github.hantsy.ee8sample.rest.user;
 
 import com.github.hantsy.ee8sample.domain.repository.UserRepository;
-import javax.annotation.Resource;
 import javax.ejb.Stateless;
-import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.inject.Inject;
 import javax.security.enterprise.SecurityContext;
 import javax.validation.Valid;
@@ -33,13 +31,9 @@ public class UserResource {
     @Inject
     UserRepository users;
 
-    @Resource
-    ManagedExecutorService executor;
-
     @Inject
     SecurityContext securityContext;
 
-    @Context
     @PathParam("username")
     String username;
 
@@ -56,7 +50,7 @@ public class UserResource {
     }
 
     @PUT
-    public Response update(@Valid UserForm form) {
+    public Response update(UserForm form) {
 
         if (securityContext.getCallerPrincipal() != null
             && securityContext.getCallerPrincipal().getName().equals(username)) {

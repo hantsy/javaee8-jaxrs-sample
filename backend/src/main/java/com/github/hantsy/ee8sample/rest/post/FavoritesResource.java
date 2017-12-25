@@ -5,6 +5,8 @@
  */
 package com.github.hantsy.ee8sample.rest.post;
 
+import com.github.hantsy.ee8sample.domain.Existed;
+import com.github.hantsy.ee8sample.domain.Count;
 import com.github.hantsy.ee8sample.domain.Favorite;
 import com.github.hantsy.ee8sample.domain.Slug;
 import com.github.hantsy.ee8sample.domain.Username;
@@ -18,8 +20,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
@@ -64,16 +64,26 @@ public class FavoritesResource {
 
     @GET
     @Path("count")
-    @Produces(MediaType.TEXT_PLAIN)
     public Response countOfPost() {
-        return Response.ok(favorites.countByPost(slug)).build();
+        return Response
+            .ok(
+                Count.builder().count(favorites.countByPost(slug)).build()
+            )
+            .build();
     }
 
     @GET
     @Path("exists")
-    @Produces(MediaType.TEXT_PLAIN)
     public Response isFavorited() {
-        return Response.ok(favorites.postIsFavorited(slug, securityContext.getCallerPrincipal().getName())).build();
+        return Response
+            .ok(
+                Existed.builder()
+                    .existed(
+                        favorites.postIsFavorited(slug, securityContext.getCallerPrincipal().getName())
+                    )
+                    .build()
+            )
+            .build();
     }
 
 }

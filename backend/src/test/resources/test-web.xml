@@ -7,13 +7,24 @@
     version="4.0"
 >
     <!-- Security constraints  -->
-    <security-constraint>
+        <security-constraint>
         <web-resource-collection>
             <web-resource-name>Protected resource/url</web-resource-name>
             <url-pattern>/api/posts/*</url-pattern>
+            <url-pattern>/api/users/*</url-pattern>
             <http-method>POST</http-method>
             <http-method>PUT</http-method>
             <http-method>DELETE</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>ROLE_USER</role-name>
+            <role-name>ROLE_ADMIN</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Current user resource/url</web-resource-name>
+            <url-pattern>/api/user/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>ROLE_USER</role-name>

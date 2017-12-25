@@ -12,7 +12,7 @@ package com.github.hantsy.ee8sample.rest.user;
 public class UsernameWasTakenException extends RuntimeException {
 
     public UsernameWasTakenException(String username) {
-        super(username + " was taken by others");
+        super(username + " was already taken by others");
     }
 
 }
