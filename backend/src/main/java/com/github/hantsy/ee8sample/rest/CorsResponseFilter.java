@@ -19,8 +19,8 @@
  */
 package com.github.hantsy.ee8sample.rest;
 
-
 import java.io.IOException;
+import static java.lang.String.join;
 import java.util.List;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
@@ -29,8 +29,9 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.Provider;
 
 /**
- * The original work is copied from https://github.com/AdamBien/cors/ by Adam Bien.
- * 
+ * The original work is copied from https://github.com/AdamBien/cors/ by Adam
+ * Bien.
+ *
  * See http://www.w3.org/TR/cors/
  *
  * @author airhacks.com
@@ -69,14 +70,15 @@ public class CorsResponseFilter implements ContainerResponseFilter {
         if (headers == null || headers.isEmpty()) {
             return defaultHeaders;
         }
-        StringBuilder retVal = new StringBuilder();
-        for (int i = 0; i < headers.size(); i++) {
-            String header = (String) headers.get(i);
-            retVal.append(header);
-            retVal.append(',');
-        }
-        retVal.append(defaultHeaders);
-        return retVal.toString();
+//        StringBuilder retVal = new StringBuilder();
+//        for (int i = 0; i < headers.size(); i++) {
+//            String header = (String) headers.get(i);
+//            retVal.append(header);
+//            retVal.append(',');
+//        }
+        String result = join(",", headers);
+        result = result + "," + defaultHeaders;
+        return result;
     }
 
 }
