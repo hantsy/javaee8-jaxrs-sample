@@ -10,11 +10,11 @@ import com.github.hantsy.ee8sample.rest.post.PostResource;
 import com.github.hantsy.ee8sample.rest.post.PostNotFoundExceptionMapper;
 import com.github.hantsy.ee8sample.Bootstrap;
 import com.github.hantsy.ee8sample.Constants;
+import com.github.hantsy.ee8sample.domain.Comment;
 import com.github.hantsy.ee8sample.domain.support.AbstractEntity;
 import com.github.hantsy.ee8sample.domain.Post;
 import com.github.hantsy.ee8sample.domain.repository.PostRepository;
 import com.github.hantsy.ee8sample.rest.auth.AuthResource;
-import com.github.hantsy.ee8sample.rest.post.CommentDetails;
 import com.github.hantsy.ee8sample.rest.post.CommentForm;
 import com.github.hantsy.ee8sample.security.Authenticated;
 import java.io.File;
@@ -217,7 +217,7 @@ public class PostResourceIT {
         final WebTarget targetGetAllComments = client.target(URI.create(new URL(base, commentsLocation).toExternalForm()));
         try (Response resGetAll = targetGetAllComments.request().accept(MediaType.APPLICATION_JSON_TYPE).get()) {
             assertEquals(200, resGetAll.getStatus());
-            List<CommentDetails> results = resGetAll.readEntity(new GenericType<List<CommentDetails>>() {
+            List<Comment> results = resGetAll.readEntity(new GenericType<List<Comment>>() {
             });
             assertTrue(results != null);
             LOG.log(Level.INFO, "comments results.size()::{0}", results.size());
@@ -243,7 +243,7 @@ public class PostResourceIT {
         final WebTarget targetVerifyComments = client.target(URI.create(new URL(base, commentsLocation).toExternalForm()));
         try (Response resGetAll = targetVerifyComments.request().accept(MediaType.APPLICATION_JSON_TYPE).get()) {
             assertEquals(200, resGetAll.getStatus());
-            List<CommentDetails> results = resGetAll.readEntity(new GenericType<List<CommentDetails>>() {
+            List<Comment> results = resGetAll.readEntity(new GenericType<List<Comment>>() {
             });
             assertTrue(results != null);
             LOG.log(Level.INFO, "comments results.size()::{0}", results.size());

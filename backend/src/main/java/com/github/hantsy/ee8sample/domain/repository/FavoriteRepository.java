@@ -29,6 +29,13 @@ public class FavoriteRepository extends AbstractRepository<Favorite, Long> {
                 .filter(f -> f.getPost().equals(new Slug(slug)))
                 .collect(toList());
     }
+    
+     public List<Favorite> findByUsername(String username) {
+        Objects.requireNonNull(username, "username can not be null");
+        return this.stream()
+                .filter(f -> f.getUser().getUsername().equals(username))
+                .collect(toList());
+    }
 
     public Boolean postIsFavorited(String slug, String username) {
         Objects.requireNonNull(slug, "post slug can not be null");

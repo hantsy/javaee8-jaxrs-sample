@@ -52,17 +52,19 @@ public class Post extends AbstractAuditableEntity<Long> {
     private Status status = DRAFT;
 
     public static Comparator<Post> DEFAULT_COMPARATOR = Comparator
-            .comparing(Post::getCreatedDate).reversed()
-            .thenComparing(Post::getTitle);
+        .comparing(Post::getCreatedDate).reversed()
+        .thenComparing(Post::getTitle);
 
     public static Function<Post, String> TO_STRING = p
-            -> "Post[title:" + p.getTitle()
-            + "\n slug:" + p.getSlug()
-            + "\n content:" + p.getContent()
-            + "\n status:" + p.getStatus()
-            + "\n createdAt:" + p.getCreatedDate()
-            + "\n lastModifiedAt:" + p.getLastModifiedDate()
-            + "]";
+        -> "Post[title:" + p.getTitle()
+        + "\n slug:" + p.getSlug()
+        + "\n content:" + p.getContent()
+        + "\n status:" + p.getStatus()
+        + "\n createdAt:" + p.getCreatedDate()
+        + "\n createdBy:" + p.getCreatedBy()
+        + "\n lastModifiedAt:" + p.getLastModifiedDate()
+        + "\n lastModifiedBy:" + p.getLastModifiedBy()
+        + "]";
 
     @PrePersist
     void beforeSave() {

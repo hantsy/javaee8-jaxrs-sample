@@ -2,8 +2,9 @@ package com.github.hantsy.ee8sample.domain.repository;
 
 import com.github.hantsy.ee8sample.domain.Comment;
 import com.github.hantsy.ee8sample.domain.support.AbstractRepository;
+import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
+import static java.util.stream.Collectors.toList;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,7 +19,7 @@ public class CommentRepository extends AbstractRepository<Comment, Long> {
     @PersistenceContext
     private EntityManager em;
 
-    public Stream<Comment> findByPost(String post, long limit, long offset) {
+    public List<Comment> findByPost(String post, long limit, long offset) {
 //        CriteriaBuilder cb = this.em.getCriteriaBuilder();
 //
 //        CriteriaQuery<Comment> q = cb.createQuery(Comment.class);
@@ -39,8 +40,8 @@ public class CommentRepository extends AbstractRepository<Comment, Long> {
         return this.stream()
                 .filter(c -> c.getPost().getSlug().equals(post))
                 .limit(limit)
-                .skip(offset);
-                //.collect(toList());
+                .skip(offset)
+                .collect(toList());
     }
 
     public long countByPost(String slug) {

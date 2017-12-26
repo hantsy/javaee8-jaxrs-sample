@@ -81,7 +81,7 @@ public class PostRepository extends AbstractRepository<Post, Long> {
 //        List<Post> posts = query.getResultList();
 
         return this.stream()
-                .filter(p -> p.getCreatedBy().equals(username))
+                .filter(p -> username.equals(p.getCreatedBy().getUsername()))
                 .sorted(Post.DEFAULT_COMPARATOR)
                 .collect(toList());
     }

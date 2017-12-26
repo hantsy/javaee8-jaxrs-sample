@@ -55,7 +55,7 @@ public class AuthResource {
     }
 
     @GET
-    @Path("user")
+    @Path("userinfo")
     public Response userInfo() {
         LOGGER.log(Level.INFO, "user info:{0}", userInfo);
         if (securityContext.getCallerPrincipal() != null) {

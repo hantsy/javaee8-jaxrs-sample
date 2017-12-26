@@ -5,6 +5,7 @@
  */
 package com.github.hantsy.ee8sample.aggregate;
 
+import com.github.hantsy.ee8sample.domain.Count;
 import com.github.hantsy.ee8sample.domain.Post;
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +33,7 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -65,7 +67,7 @@ public class AggregateResource {
     @Path("posts")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public CompletionStage aggregatedPosts(
+    public CompletionStage<Response> aggregatedPosts(
         @QueryParam("q") String keyword,
         @QueryParam("limit") @DefaultValue("10") int limit,
         @QueryParam("offset") @DefaultValue("0") int offset
@@ -98,7 +100,8 @@ public class AggregateResource {
                                 CompletionStage<Long> commentsCountStage = client.target(uriInfo.getBaseUriBuilder().path("posts/{slug}/comments/count").build(p.getSlug()))
                                     .request(MediaType.TEXT_PLAIN)
                                     .rx()
-                                    .get(Long.class)
+                                    .get(Count.class)
+                                    .thenApply(Count::getCount)
                                     .exceptionally(
                                         throwable -> {
                                             errors.offer("exception when counting comments of posts: " + throwable.getMessage());
@@ -124,7 +127,8 @@ public class AggregateResource {
                     .queryParam("q", keyword)
                     .request(MediaType.TEXT_PLAIN)
                     .rx()
-                    .get(Long.class)
+                    .get(Count.class)
+                    .thenApply(Count::getCount)
                     .exceptionally(
                         throwable -> {
                             errors.offer("exception when counting posts: " + throwable.getMessage());
@@ -142,7 +146,8 @@ public class AggregateResource {
                     );
                 
             })
-            .thenApply(ps -> ps.addLink(Link.fromUriBuilder(uriInfo.getBaseUriBuilder()).rel("self").uri("posts").build()));
+            .thenApply(ps -> ps.addLink(Link.fromUriBuilder(uriInfo.getBaseUriBuilder()).rel("self").uri("posts").build()))
+            .thenApply(ps-> Response.ok(ps).build());
         
     }
 

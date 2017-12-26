@@ -6,10 +6,9 @@
 package com.github.hantsy.ee8sample.rest.post;
 
 import com.github.hantsy.ee8sample.domain.Comment;
+import com.github.hantsy.ee8sample.domain.Count;
 import com.github.hantsy.ee8sample.domain.Slug;
 import com.github.hantsy.ee8sample.domain.repository.CommentRepository;
-import java.util.List;
-import static java.util.stream.Collectors.toList;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;
@@ -50,18 +49,16 @@ public class CommentsResource {
         @QueryParam("limit") @DefaultValue("50") int limit,
         @QueryParam("offset") @DefaultValue("0") int offset
     ) {
-        List<CommentDetails> all = comments.findByPost(slug, limit, offset)
-            .map(c -> toDetails(c))
-            .collect(toList());
-
-        return Response.ok(all).build();
+        return Response.ok(comments.findByPost(slug, limit, offset)).build();
     }
 
     @Path("count")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Response countOfComments() {
-        return Response.ok(comments.countByPost(slug)).build();
+        return Response.ok(
+            Count.builder().count(comments.countByPost(slug)).build()
+        ).build();
     }
 
     @POST
@@ -81,9 +78,6 @@ public class CommentsResource {
     @GET
     public Response getCommentById(@PathParam("commentId") Long commentId) {
         return comments.findOptionalById(commentId)
-            .map(
-                c -> toDetails(c)
-            )
             .map(c -> Response.ok(c).build())
             .orElseThrow(() -> new CommentNotFoundException(commentId));
 
@@ -113,14 +107,6 @@ public class CommentsResource {
             .map(c -> Response.noContent().build())
             .orElseThrow(() -> new CommentNotFoundException(commentId));
 
-    }
-
-    CommentDetails toDetails(Comment c) {
-        return CommentDetails.builder()
-            .content(c.getContent())
-            .createdBy(c.getCreatedBy())
-            .createdDate(c.getCreatedDate())
-            .build();
     }
 
 }

@@ -5,6 +5,7 @@
  */
 package com.github.hantsy.ee8sample.rest.post;
 
+import com.github.hantsy.ee8sample.domain.Count;
 import com.github.hantsy.ee8sample.domain.Post;
 import com.github.hantsy.ee8sample.domain.repository.PostRepository;
 import javax.ejb.Stateless;
@@ -18,8 +19,6 @@ import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.Produces;
-import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
 /**
  *
@@ -49,9 +48,10 @@ public class PostsResource {
 
     @GET
     @Path("count")
-    @Produces(TEXT_PLAIN)
     public Response getAllPosts(@QueryParam("q") String q) {
-        return Response.ok(this.posts.countByKeyword(q)).build();
+        return Response.ok(
+            Count.builder().count(this.posts.countByKeyword(q))
+        ).build();
     }
 
     @POST
