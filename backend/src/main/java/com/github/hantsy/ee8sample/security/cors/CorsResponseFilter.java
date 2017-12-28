@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.github.hantsy.ee8sample.rest;
+package com.github.hantsy.ee8sample.security.cors;
 
 import java.io.IOException;
 import static java.lang.String.join;
@@ -49,7 +49,8 @@ public class CorsResponseFilter implements ContainerResponseFilter {
         final MultivaluedMap<String, Object> headers = responseContext.getHeaders();
         headers.add("Access-Control-Allow-Origin", "*");
         headers.add("Access-Control-Allow-Headers", getRequestedAllowedHeaders(requestContext));
-        headers.add("Access-Control-Expose-Headers", getRequestedExposedHeaders(requestContext));
+        // do not set expose headers
+        //headers.add("Access-Control-Expose-Headers", getRequestedExposedHeaders(requestContext));
         headers.add("Access-Control-Allow-Credentials", "true");
         headers.add("Access-Control-Allow-Methods", ALLOWED_METHODS);
         headers.add("Access-Control-Max-Age", MAX_AGE);

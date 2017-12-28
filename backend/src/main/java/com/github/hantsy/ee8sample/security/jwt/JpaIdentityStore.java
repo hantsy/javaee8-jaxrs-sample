@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.hantsy.ee8sample.security.identitystore;
+package com.github.hantsy.ee8sample.security.jwt;
 
 import com.github.hantsy.ee8sample.domain.repository.UserRepository;
 import com.github.hantsy.ee8sample.security.hash.Crypto;
