@@ -1,6 +1,6 @@
 # javaee8-jaxrs-sample(WIP)
 
-
+> Check the latest [Jakarta EE REST Example](https://github.com/hantsy/jakartaee-rest-sample) project.
 
 I have created [ a RESTful  API sample ](https://github/hantsy/angularjs-ee7-sample) to  demostrate how to build RESTful APIs with  Java EE 7 and JAX-RS 2.0.
 
